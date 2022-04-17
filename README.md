@@ -17,7 +17,7 @@ This is the backend interface for a web-based store that allows for the renting 
   <br />
   <br />
   
-This is a collaboration project with fellow colleague [Brandon Vieira](https://github.com/BrandonVieira-C)
+This is a collaboration project with [Brandon Vieira](https://github.com/BrandonVieira-C)
 
 
 
