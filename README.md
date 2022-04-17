@@ -2,7 +2,7 @@
 
   
 ******Overview:******  
-In this project, users are able to register, create, update and delete data from the database through valid API requests. By adhering strictly to object-oriented principles, all classes and objects are abstracted, encapsulated, polymorphed and inherited. This allows for good maintainable code that can be easily edited down the road if need be.
+In this project, users are able to register, create, update and delete data from the database through valid API requests. By adhering strictly to object-oriented principles, all classes and objects in this project shall be abstracted, encapsulated, polymorphed and inherited. This allow for both good maintainable code that can be edited down the road and also proper security so irrelevant data will not be leaked.
 
 ******Language Involved:******  
 Java, SQL
