@@ -13,30 +13,49 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="partner")
+@Table(name = "partner")
 public class Partner {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  @Column(name="partner_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "partner_id")
   private Integer partnerId;
 
-  @Column(name="first_name")
+  @Column(name = "first_name")
   private String firstName;
 
-  @Column(name="last_name")
+  @Column(name = "last_name")
   private String lastName;
 
-  @Column(name="partner_rating")
-  private Integer partnerRating;
+  @Column(name = "password")
+  private String password;
+
+  @Column(name = "email_id")
+  private String emailId;
 
   // backyard table have partner_id
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name="partner_id")
+  @JoinColumn(name = "partner_id")
   private List<Backyard> backyards;
   // -----------------------------------------------------------------------------------------------------------
 
   public Integer getPartnerId() {
     return partnerId;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getEmailId() {
+    return emailId;
+  }
+
+  public void setEmailId(String emailId) {
+    this.emailId = emailId;
   }
 
   public void setPartnerId(Integer partnerId) {
@@ -59,14 +78,6 @@ public class Partner {
     this.lastName = lastName;
   }
 
-  public Integer getPartnerRating() {
-    return partnerRating;
-  }
-
-  public void setPartnerRating(Integer partnerRating) {
-    this.partnerRating = partnerRating;
-  }
-
   public List<Backyard> getBackyards() {
     return backyards;
   }
@@ -74,5 +85,5 @@ public class Partner {
   public void setBackyards(List<Backyard> backyards) {
     this.backyards = backyards;
   }
-  
+
 }

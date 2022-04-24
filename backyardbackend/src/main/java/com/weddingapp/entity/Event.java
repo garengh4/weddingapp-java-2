@@ -10,42 +10,52 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="event")
+@Table(name = "event")
 public class Event {
 
-	@Id
-  @Column(name="event_id")
-	@GeneratedValue(strategy=GenerationType.IDENTITY) 
-	private Integer eventId;
+  @Id
+  @Column(name = "event_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer eventId;
 
-  @Column(name="event_name")
-	private String eventName;
+  @Column(name = "event_name")
+  private String eventName;
 
-  @Column(name="event_date")
-	private LocalDate eventDate;
+  @Column(name = "event_description")
+  private String eventDescription;
 
-  @Column(name="backyard_id")
-  private Integer backyardId;
-  
-  @Column(name="customer_id")
+  @Column(name = "event_date")
+  private LocalDate eventDate;
+
+  @Column(name = "customer_id")
   private Integer customerId;
+
+  @Column(name = "backyard_id")
+  private Integer backyardId;
 
   // -----------------------------------------------------------------------------------------------------------
 
-  
   public Integer getEventId() {
     return eventId;
   }
 
+  public String getEventDescription() {
+    return eventDescription;
+  }
+
+  public void setEventDescription(String eventDescription) {
+    this.eventDescription = eventDescription;
+  }
+
   public Integer getCustomerId() {
-	return customerId;
-}
+    return customerId;
+  }
 
-public void setCustomerId(Integer customerId) {
-	this.customerId = customerId;
-}
+  public void setCustomerId(Integer customerId) {
+    this.customerId = customerId;
+  }
 
-public void setEventId(Integer eventId) {
+  public void setEventId(Integer eventId) {
     this.eventId = eventId;
   }
 
@@ -72,7 +82,5 @@ public void setEventId(Integer eventId) {
   public void setBackyardId(Integer backyardId) {
     this.backyardId = backyardId;
   }
-
-
 
 }

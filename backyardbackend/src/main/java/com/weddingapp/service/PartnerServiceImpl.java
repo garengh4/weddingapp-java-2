@@ -49,7 +49,6 @@ public class PartnerServiceImpl implements PartnerService {
       dto.setPartnerId(entity.getPartnerId());
       dto.setFirstName(entity.getFirstName());
       dto.setLastName(entity.getLastName());
-      dto.setPartnerRating(entity.getPartnerRating());
       // not setting partner backyard here?
       // Probably combine getBackyardsByPartnerId to getAllPartner?
       partnerDTOs.add(dto);
@@ -71,14 +70,12 @@ public class PartnerServiceImpl implements PartnerService {
     partnerDTO.setPartnerId(partner.getPartnerId());
     partnerDTO.setFirstName(partner.getFirstName());
     partnerDTO.setLastName(partner.getLastName());
-    partnerDTO.setPartnerRating(partner.getPartnerRating());
 
     List<Backyard> partnerBackyards = partner.getBackyards();
     List<BackyardDTO> partnerBackyardsDTO = partnerBackyards.stream().map(entity -> {
       BackyardDTO dto = new BackyardDTO();
       dto.setBackyardId(entity.getBackyardId());
       dto.setBackyardDescription(entity.getBackyardDescription());
-      dto.setBackyardRating(entity.getBackyardRating());
       dto.setBackyardCity(entity.getBackyardCity());
       dto.setBackyardCost(entity.getBackyardCost());
       // not setting partnerId here because it seems redundant.
@@ -109,7 +106,6 @@ public class PartnerServiceImpl implements PartnerService {
     Backyard newBackyard = new Backyard();
     newBackyard.setPartnerId(partnerId);
     newBackyard.setBackyardDescription(backyardDTO.getBackyardDescription());
-    newBackyard.setBackyardRating(backyardDTO.getBackyardRating()); // not sure who actually sets the backyardRating
     newBackyard.setBackyardCity(backyardDTO.getBackyardCity());
     newBackyard.setBackyardCost(backyardDTO.getBackyardCost());
 
@@ -135,7 +131,6 @@ public class PartnerServiceImpl implements PartnerService {
       backyard.setBackyardDescription(partnerBackyard.getBackyardDescription());
       backyard.setBackyardCity(partnerBackyard.getBackyardCity());
       backyard.setBackyardCost(partnerBackyard.getBackyardCost());
-      backyard.setBackyardRating(partnerBackyard.getBackyardRating());
       backyard.setPartnerId(partnerId);
       listBackyards.add(backyard);
     });

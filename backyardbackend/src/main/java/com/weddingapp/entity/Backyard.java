@@ -8,32 +8,40 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="backyard")
+@Table(name = "backyard")
 public class Backyard {
 
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  @Column(name="backyard_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "backyard_id")
   private Integer backyardId;
 
-  @Column(name="backyard_description")
+  @Column(name = "backyard_name")
+  private String backyardName;
+
+  @Column(name = "backyard_description")
   private String backyardDescription;
 
-  @Column(name="backyard_rating")
-  private Integer backyardRating;
-
-  @Column(name="backyard_city")
+  @Column(name = "backyard_city")
   private String backyardCity;
 
-  @Column(name="backyard_cost")
+  @Column(name = "backyard_cost")
   private Integer backyardCost;
 
-  @Column(name="partner_id")
+  @Column(name = "partner_id")
   private Integer partnerId;
   // -----------------------------------------------------------------------------------------------------------
 
   public Integer getBackyardId() {
     return backyardId;
+  }
+
+  public String getBackyardName() {
+    return backyardName;
+  }
+
+  public void setBackyardName(String backyardName) {
+    this.backyardName = backyardName;
   }
 
   public void setBackyardId(Integer backyardId) {
@@ -46,14 +54,6 @@ public class Backyard {
 
   public void setBackyardDescription(String backyardDescription) {
     this.backyardDescription = backyardDescription;
-  }
-
-  public Integer getBackyardRating() {
-    return backyardRating;
-  }
-
-  public void setBackyardRating(Integer backyardRating) {
-    this.backyardRating = backyardRating;
   }
 
   public String getBackyardCity() {

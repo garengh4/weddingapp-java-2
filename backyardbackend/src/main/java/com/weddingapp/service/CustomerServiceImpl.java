@@ -34,6 +34,8 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public Integer registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException {
+    // boolean isEmailAvailable = customerRepository.findByEmailId(customerDTO.getEmailId().toLowerCase()).
+    Customer test = customerRepository.findByEmailId(customerDTO.getEmailId().toLowerCase());
     Customer customer = new Customer();
     customer.setFirstName(customerDTO.getFirstName());
     customer.setLastName(customerDTO.getLastName());
@@ -152,7 +154,6 @@ public class CustomerServiceImpl implements CustomerService {
       dto.setBackyardCost(entity.getBackyardCost());
       dto.setBackyardDescription(entity.getBackyardDescription());
       dto.setBackyardId(entity.getBackyardId());
-      dto.setBackyardRating(entity.getBackyardRating());
       dto.setPartnerId(entity.getPartnerId());
       dtoList.add(dto);
     });
