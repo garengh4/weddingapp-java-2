@@ -20,29 +20,30 @@ public class PartnerRepositoryTest {
 
   @BeforeEach
   public void setUp() {
-  partner = new Partner();
-  partner.setFirstName("Deborah");
-  partner.setLastName("Yue");
+    partner = new Partner();
+    partner.setPartnerEmailId("deborahy@gmail.com");
+    partner.setFirstName("Deborah");
+    partner.setLastName("Yue");
+    partner.setPassword("DebY@");
   }
 
   @Test
   public void savePartnerValidTest() {
-    Partner partnerFromDB = partnerRepository.save(partner);   
-    // Assertions.assertEquals(1, partnerFromDB.getPartnerId());
+    Partner partnerFromDB = partnerRepository.save(partner);
     Assertions.assertEquals("Yue", partnerFromDB.getLastName());
   }
 
   @Test
   public void findByIdValidTest() {
     partnerRepository.save(partner);
-    Optional<Partner> partnerContainer = partnerRepository.findById(1);
+    Optional<Partner> partnerContainer = partnerRepository.findById("deborahy@gmail.com");
     Assertions.assertTrue(partnerContainer.isPresent());
   }
 
   // partner hasn't been saved so it should be empty.
   @Test
   public void findByIdInvalidTest() {
-    Optional<Partner> partnerContainer = partnerRepository.findById(1);
+    Optional<Partner> partnerContainer = partnerRepository.findById("deborahy@gmail.com");
     Assertions.assertTrue(partnerContainer.isEmpty());
 
   }
