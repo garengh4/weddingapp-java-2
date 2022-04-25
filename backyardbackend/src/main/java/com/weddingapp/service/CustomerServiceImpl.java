@@ -41,7 +41,8 @@ public class CustomerServiceImpl implements CustomerService {
     customer.setLastName(customerDTO.getLastName());
 
     Customer customerFromDB = customerRepository.save(customer);
-    return customerFromDB.getCustomerId();
+    return null;
+    // return customerFromDB.getCustomerId();
   }
 
   @Override
@@ -51,7 +52,7 @@ public class CustomerServiceImpl implements CustomerService {
     List<CustomerDTO> customerDTOs = new LinkedList<CustomerDTO>();
     for (Customer c : customers) {
       CustomerDTO dto = new CustomerDTO();
-      dto.setCustomerId(c.getCustomerId());
+      // dto.setCustomerId(c.getCustomerId());
       dto.setFirstName(c.getFirstName());
       dto.setLastName(c.getLastName());
       customerDTOs.add(dto);
@@ -70,7 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     CustomerDTO customerDTO = new CustomerDTO();
-    customerDTO.setCustomerId(customer.getCustomerId());
+    // customerDTO.setCustomerId(customer.getCustomerId());
     customerDTO.setFirstName(customer.getFirstName());
     customerDTO.setLastName(customer.getLastName());
 
@@ -95,7 +96,7 @@ public class CustomerServiceImpl implements CustomerService {
     Event newEvent = new Event();
     newEvent.setEventName(eventDTO.getEventName());
     newEvent.setEventDate(eventDTO.getEventDate());
-    newEvent.setCustomerId(customerId);
+    // newEvent.setCustomerId(customerId);
 
     newEvent.setBackyardId(eventDTO.getBackyardId());
 
@@ -122,7 +123,7 @@ public class CustomerServiceImpl implements CustomerService {
       dto.setEventDate(event.getEventDate());
 
       dto.setBackyardId(event.getBackyardId());
-      dto.setCustomerId(event.getCustomerId());
+      // dto.setCustomerId(event.getCustomerId());
       listEvents.add(dto);
     }
     return listEvents;
@@ -154,7 +155,7 @@ public class CustomerServiceImpl implements CustomerService {
       dto.setBackyardCost(entity.getBackyardCost());
       dto.setBackyardDescription(entity.getBackyardDescription());
       dto.setBackyardId(entity.getBackyardId());
-      dto.setPartnerId(entity.getPartnerId());
+      // dto.setPartnerId(entity.getPartnerId());
       dtoList.add(dto);
     });
     return dtoList;
@@ -166,7 +167,7 @@ public class CustomerServiceImpl implements CustomerService {
         () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
 
     CustomerDTO customerDTO = new CustomerDTO();
-    customerDTO.setCustomerId(customer.getCustomerId());
+    // customerDTO.setCustomerId(customer.getCustomerId());
     customerDTO.setFirstName(customer.getFirstName());
     customerDTO.setLastName(customer.getLastName());
 
@@ -192,7 +193,7 @@ public class CustomerServiceImpl implements CustomerService {
         .orElseThrow(() -> new BackyardWeddingException("Event not found."));
 
     event.setBackyardId(eventDto.getBackyardId());
-    event.setCustomerId(eventDto.getCustomerId());
+    // event.setCustomerId(eventDto.getCustomerId());
     event.setEventDate(eventDto.getEventDate());
     event.setEventId(eventDto.getEventId());
     event.setEventName(eventDto.getEventName());

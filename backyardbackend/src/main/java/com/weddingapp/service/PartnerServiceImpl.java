@@ -36,7 +36,8 @@ public class PartnerServiceImpl implements PartnerService {
     // not setting partnerBackyard here: the backyard will be added later.
 
     Partner partnerFromDB = partnerRepository.save(partner);
-    return partnerFromDB.getPartnerId();
+    return null;
+    // return partnerFromDB.getPartnerId();
   }
 
   @Override
@@ -46,7 +47,7 @@ public class PartnerServiceImpl implements PartnerService {
     List<PartnerDTO> partnerDTOs = new ArrayList<>();
     partners.forEach(entity -> {
       PartnerDTO dto = new PartnerDTO();
-      dto.setPartnerId(entity.getPartnerId());
+      // dto.setPartnerId(entity.getPartnerId());
       dto.setFirstName(entity.getFirstName());
       dto.setLastName(entity.getLastName());
       // not setting partner backyard here?
@@ -67,7 +68,7 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     PartnerDTO partnerDTO = new PartnerDTO();
-    partnerDTO.setPartnerId(partner.getPartnerId());
+    // partnerDTO.setPartnerId(partner.getPartnerId());
     partnerDTO.setFirstName(partner.getFirstName());
     partnerDTO.setLastName(partner.getLastName());
 
@@ -104,7 +105,7 @@ public class PartnerServiceImpl implements PartnerService {
     List<Backyard> listOfPartnerBackyards = partner.getBackyards();
 
     Backyard newBackyard = new Backyard();
-    newBackyard.setPartnerId(partnerId);
+    // newBackyard.setPartnerId(partnerId);
     newBackyard.setBackyardDescription(backyardDTO.getBackyardDescription());
     newBackyard.setBackyardCity(backyardDTO.getBackyardCity());
     newBackyard.setBackyardCost(backyardDTO.getBackyardCost());

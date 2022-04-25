@@ -37,7 +37,7 @@ public class PartnerServiceTest {
   @Test
   public void authenticatePartnerValidTest() throws BackyardWeddingException {
     Partner partnerInDB = new Partner();
-    partnerInDB.setPartnerId(1);
+    // partnerInDB.setPartnerId(1);
     partnerInDB.setFirstName("Deborah");
     partnerInDB.setLastName("Yue");
     List<Backyard> listOfBackyards = new ArrayList<>(); // BUG: need to initialize
@@ -55,7 +55,7 @@ public class PartnerServiceTest {
   @Test
   public void registerNewPartnerValidTest() throws BackyardWeddingException {
     Partner partnerContainer = new Partner();
-    partnerContainer.setPartnerId(99);
+    // partnerContainer.setPartnerId(99);
     Mockito.when(partnerRepository.save(Mockito.any())).thenReturn(partnerContainer);
 
     PartnerDTO newPartner = new PartnerDTO();
@@ -86,7 +86,7 @@ public class PartnerServiceTest {
   @Test
   public void deletePartnerByIdValidTest() throws BackyardWeddingException {
     Partner partnerInDB = new Partner();
-    partnerInDB.setPartnerId(1);
+    // partnerInDB.setPartnerId(1);
     partnerInDB.setFirstName("Deborah");
     partnerInDB.setLastName("Yue");
     Mockito.when(partnerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(partnerInDB));
@@ -109,7 +109,7 @@ public class PartnerServiceTest {
     listOfBackyards.add(backyardOne);
     listOfBackyards.add(backyardTwo);
     Partner partnerInDB = new Partner();
-    partnerInDB.setPartnerId(1);
+    // partnerInDB.setPartnerId(1);
     partnerInDB.setBackyards(listOfBackyards);
     Optional<Partner> optionalPartner = Optional.of(partnerInDB);
 
@@ -126,7 +126,7 @@ public class PartnerServiceTest {
     Mockito.when(backyardRepository.save(Mockito.any())).thenReturn(backyardOne);
 
     Partner partnerInDB = new Partner();
-    partnerInDB.setPartnerId(99);
+    // partnerInDB.setPartnerId(99);
     partnerInDB.setFirstName("resulting partner upon partnerRepository.findById");
     List<Backyard> listOfBackyards = new ArrayList<>();
     listOfBackyards.add(backyardOne);

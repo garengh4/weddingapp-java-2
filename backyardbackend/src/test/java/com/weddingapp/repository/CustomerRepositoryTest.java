@@ -21,27 +21,28 @@ public class CustomerRepositoryTest {
   @BeforeEach
   public void setUp() {
     customer = new Customer();
+    customer.setCustomerEmailId("deborahy@gmail.com");
     customer.setFirstName("Deborah");
     customer.setLastName("Yue");
+    customer.setPassword("DebY@");
   }
 
   @Test
   void saveCustomerValidTest() {
     Customer customerFromDB = customerRepository.save(customer);
-    // Assertions.assertEquals(1, customerFromDB.getCustomerId());
     Assertions.assertEquals("Yue", customerFromDB.getLastName());
   }
 
   @Test
   public void findByIdValidTest() {
     customerRepository.save(customer);
-    Optional<Customer> customerContainer = customerRepository.findById(1);
+    Optional<Customer> customerContainer = customerRepository.findById("deborahy@gmail.com");
     Assertions.assertTrue(customerContainer.isPresent());
   }
 
   @Test
   public void findByIdInvalidTest() {
-    Optional<Customer> customerContainer = customerRepository.findById(1);
+    Optional<Customer> customerContainer = customerRepository.findById("deborahy@gmail.com");
     Assertions.assertTrue(customerContainer.isEmpty());
   }
 

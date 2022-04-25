@@ -28,8 +28,9 @@ public class Backyard {
   @Column(name = "backyard_cost")
   private Integer backyardCost;
 
-  @Column(name = "partner_id")
-  private Integer partnerId;
+  @Column(name = "partner_email_id")
+  private String partnerEmailId;
+
   // -----------------------------------------------------------------------------------------------------------
 
   public Integer getBackyardId() {
@@ -72,12 +73,5 @@ public class Backyard {
     this.backyardCost = backyardCost;
   }
 
-  public Integer getPartnerId() {
-    return partnerId;
-  }
-
-  public void setPartnerId(Integer partnerId) {
-    this.partnerId = partnerId;
-  }
 
 }

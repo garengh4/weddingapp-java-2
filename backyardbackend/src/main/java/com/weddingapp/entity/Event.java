@@ -27,8 +27,8 @@ public class Event {
   @Column(name = "event_date")
   private LocalDate eventDate;
 
-  @Column(name = "customer_id")
-  private Integer customerId;
+  @Column(name = "customer_email_id")
+  private String customerEmailId;
 
   @Column(name = "backyard_id")
   private Integer backyardId;
@@ -37,22 +37,6 @@ public class Event {
 
   public Integer getEventId() {
     return eventId;
-  }
-
-  public String getEventDescription() {
-    return eventDescription;
-  }
-
-  public void setEventDescription(String eventDescription) {
-    this.eventDescription = eventDescription;
-  }
-
-  public Integer getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(Integer customerId) {
-    this.customerId = customerId;
   }
 
   public void setEventId(Integer eventId) {
@@ -67,12 +51,28 @@ public class Event {
     this.eventName = eventName;
   }
 
+  public String getEventDescription() {
+    return eventDescription;
+  }
+
+  public void setEventDescription(String eventDescription) {
+    this.eventDescription = eventDescription;
+  }
+
   public LocalDate getEventDate() {
     return eventDate;
   }
 
   public void setEventDate(LocalDate eventDate) {
     this.eventDate = eventDate;
+  }
+
+  public String getCustomerEmailId() {
+    return customerEmailId;
+  }
+
+  public void setCustomerEmailId(String customerEmailId) {
+    this.customerEmailId = customerEmailId;
   }
 
   public Integer getBackyardId() {

@@ -5,8 +5,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -17,9 +15,8 @@ import javax.persistence.Table;
 public class Customer {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "customer_id")
-  private Integer customerId;
+  @Column(name = "customer_email_id")
+  private String customerEmailId;
 
   @Column(name = "first_name")
   private String firstName;
@@ -30,37 +27,18 @@ public class Customer {
   @Column(name = "password")
   private String password;
 
-  @Column(name = "email_id")
-  private String emailId;
-
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "customer_id")
+  @JoinColumn(name = "customer_email_id")
   private List<Event> events;
 
   // -----------------------------------------------------------------------------------------------------------
 
-  public Integer getCustomerId() {
-    return customerId;
+  public String getCustomerEmailId() {
+    return customerEmailId;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getEmailId() {
-    return emailId;
-  }
-
-  public void setEmailId(String emailId) {
-    this.emailId = emailId;
-  }
-
-  public void setCustomerId(Integer customerId) {
-    this.customerId = customerId;
+  public void setCustomerEmailId(String customerEmailId) {
+    this.customerEmailId = customerEmailId;
   }
 
   public String getFirstName() {
@@ -77,6 +55,14 @@ public class Customer {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public List<Event> getEvents() {

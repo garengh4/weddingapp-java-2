@@ -35,7 +35,7 @@ public class CustomerServiceTest {
   @Test
   public void registerNewCustomerValidTest() throws BackyardWeddingException {
     Customer customerInDB = new Customer();
-    customerInDB.setCustomerId(99);
+    // customerInDB.setCustomerId(99);
     Mockito.when(customerRepository.save(Mockito.any())).thenReturn(customerInDB);
 
     CustomerDTO newCustomer = new CustomerDTO();
@@ -50,11 +50,11 @@ public class CustomerServiceTest {
   public void getAllCustomerValidTest() throws BackyardWeddingException {
     List<Customer> listOfCustomersInDB = new ArrayList<>();
     Customer customerOne = new Customer();
-    customerOne.setCustomerId(1);
+    // customerOne.setCustomerId(1);
     customerOne.setFirstName("Deborah");
     customerOne.setLastName("Yue");
     Customer customerTwo = new Customer();
-    customerTwo.setCustomerId(2);
+    // customerTwo.setCustomerId(2);
     customerTwo.setFirstName("Claire");
     customerTwo.setLastName("Bear");
     listOfCustomersInDB.add(customerOne);
@@ -68,7 +68,7 @@ public class CustomerServiceTest {
   @Test
   public void authenticateCustomerValidTest() throws BackyardWeddingException {
     Customer customerInDB = new Customer();
-    customerInDB.setCustomerId(98);
+    // customerInDB.setCustomerId(98);
     customerInDB.setFirstName("Deborah");
     customerInDB.setLastName("Yue");
     Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
@@ -84,7 +84,7 @@ public class CustomerServiceTest {
   @Test
   public void deleteCustomerByIdValidTest() throws BackyardWeddingException {
     Customer customerInDB = new Customer();
-    customerInDB.setCustomerId(1);
+    // customerInDB.setCustomerId(1);
     customerInDB.setFirstName("Deborah");
     customerInDB.setLastName("Yue");
     Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
@@ -103,7 +103,7 @@ public class CustomerServiceTest {
     Mockito.when(eventRepository.save(Mockito.any())).thenReturn(returnedEventAfterSave);
 
     Customer customerInDB = new Customer();
-    customerInDB.setCustomerId(99);
+    // customerInDB.setCustomerId(99);
     customerInDB.setFirstName("resulting customer upon customerRepository.findById");
     List<Event> listOfEvents = new ArrayList<>();
     listOfEvents.add(returnedEventAfterSave);
@@ -128,7 +128,7 @@ public class CustomerServiceTest {
     eventsInDB.add(eventOne);
     eventsInDB.add(eventTwo);
     Customer customerInDB = new Customer();
-    customerInDB.setCustomerId(1);
+    // customerInDB.setCustomerId(1);
     customerInDB.setFirstName("resulting customer object upon customerRepository.findById");
     customerInDB.setEvents(eventsInDB);
     Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
