@@ -7,12 +7,16 @@ public class BackyardDTO {
   private String backyardDescription;
   private String backyardCity;
   private Integer backyardCost;
-  private Integer partnerId;
+  private String partnerEmailId;
 
   // -----------------------------------------------------------------------------------------------------------
 
   public Integer getBackyardId() {
     return backyardId;
+  }
+
+  public void setBackyardId(Integer backyardId) {
+    this.backyardId = backyardId;
   }
 
   public String getBackyardName() {
@@ -21,10 +25,6 @@ public class BackyardDTO {
 
   public void setBackyardName(String backyardName) {
     this.backyardName = backyardName;
-  }
-
-  public void setBackyardId(Integer backyardId) {
-    this.backyardId = backyardId;
   }
 
   public String getBackyardDescription() {
@@ -51,12 +51,12 @@ public class BackyardDTO {
     this.backyardCost = backyardCost;
   }
 
-  public Integer getPartnerId() {
-    return partnerId;
+  public String getPartnerEmailId() {
+    return partnerEmailId;
   }
 
-  public void setPartnerId(Integer partnerId) {
-    this.partnerId = partnerId;
+  public void setPartnerEmailId(String partnerEmailId) {
+    this.partnerEmailId = partnerEmailId;
   }
 
 }

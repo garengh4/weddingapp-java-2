@@ -29,7 +29,7 @@ public class Customer {
 
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "customer_email_id")
-  private List<Event> events;
+  private List<Event> customerEvents;
 
   // -----------------------------------------------------------------------------------------------------------
 
@@ -65,12 +65,14 @@ public class Customer {
     this.password = password;
   }
 
-  public List<Event> getEvents() {
-    return events;
+  public List<Event> getCustomerEvents() {
+    return customerEvents;
   }
 
-  public void setEvents(List<Event> events) {
-    this.events = events;
+  public void setCustomerEvents(List<Event> customerEvents) {
+    this.customerEvents = customerEvents;
   }
+
+
 
 }

@@ -10,29 +10,13 @@ public class EventDTO {
   private LocalDate eventDate;
 
   // being used for adding events.
+  private String customerEmailId;
   private Integer backyardId;
-  private Integer customerId;
 
   // -----------------------------------------------------------------------------------------------------------
 
   public Integer getEventId() {
     return eventId;
-  }
-
-  public String getEventDescription() {
-    return eventDescription;
-  }
-
-  public void setEventDescription(String eventDescription) {
-    this.eventDescription = eventDescription;
-  }
-
-  public Integer getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(Integer customerId) {
-    this.customerId = customerId;
   }
 
   public void setEventId(Integer eventId) {
@@ -47,12 +31,28 @@ public class EventDTO {
     this.eventName = eventName;
   }
 
+  public String getEventDescription() {
+    return eventDescription;
+  }
+
+  public void setEventDescription(String eventDescription) {
+    this.eventDescription = eventDescription;
+  }
+
   public LocalDate getEventDate() {
     return eventDate;
   }
 
   public void setEventDate(LocalDate eventDate) {
     this.eventDate = eventDate;
+  }
+
+  public String getCustomerEmailId() {
+    return customerEmailId;
+  }
+
+  public void setCustomerEmailId(String customerEmailId) {
+    this.customerEmailId = customerEmailId;
   }
 
   public Integer getBackyardId() {
@@ -62,4 +62,5 @@ public class EventDTO {
   public void setBackyardId(Integer backyardId) {
     this.backyardId = backyardId;
   }
+
 }

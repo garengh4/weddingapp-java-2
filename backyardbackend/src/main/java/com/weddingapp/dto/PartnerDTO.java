@@ -4,36 +4,19 @@ import java.util.List;
 
 public class PartnerDTO {
 
-  private Integer partnerId;
+  private String partnerEmailId;
   private String firstName;
   private String lastName;
   private String password;
-  private String emailId;
   private List<BackyardDTO> partnerBackyards;
   // -----------------------------------------------------------------------------------------------------------
 
-  public Integer getPartnerId() {
-    return partnerId;
+  public String getPartnerEmailId() {
+    return partnerEmailId;
   }
 
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public String getEmailId() {
-    return emailId;
-  }
-
-  public void setEmailId(String emailId) {
-    this.emailId = emailId;
-  }
-
-  public void setPartnerId(Integer partnerId) {
-    this.partnerId = partnerId;
+  public void setPartnerEmailId(String partnerEmailId) {
+    this.partnerEmailId = partnerEmailId;
   }
 
   public String getFirstName() {
@@ -50,6 +33,14 @@ public class PartnerDTO {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   public List<BackyardDTO> getPartnerBackyards() {

@@ -33,16 +33,23 @@ public class CustomerServiceImpl implements CustomerService {
   private BackyardRepository backyardRepository;
 
   @Override
-  public Integer registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException {
+  public String registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException {
     // boolean isEmailAvailable = customerRepository.findByEmailId(customerDTO.getEmailId().toLowerCase()).
-    Customer test = customerRepository.findByEmailId(customerDTO.getEmailId().toLowerCase());
-    Customer customer = new Customer();
-    customer.setFirstName(customerDTO.getFirstName());
-    customer.setLastName(customerDTO.getLastName());
+    // Customer test = customerRepository.findByEmailId(customerDTO.getEmailId().toLowerCase());
+    boolean isEmailAvailable = customerRepository.findById(customerDTO.getCustomerEmailId().toLowerCase()).isEmpty();
 
-    Customer customerFromDB = customerRepository.save(customer);
-    return null;
-    // return customerFromDB.getCustomerId();
+    if(isEmailAvailable){
+      Customer newCustomer = new Customer();
+      newCustomer.setCustomerEmailId(customerDTO.getCustomerEmailId());
+      newCustomer.setFirstName(customerDTO.getFirstName());
+      newCustomer.setLastName(customerDTO.getLastName());
+      newCustomer.setPassword(customerDTO.getPassword());
+      customerRepository.save(newCustomer);
+    } else {
+      throw new BackyardWeddingException("CustomerService.EMAIL_ID_ALREADY_IN_USE");
+    }
+    return customerDTO.getCustomerEmailId();
+
   }
 
   @Override
@@ -63,70 +70,78 @@ public class CustomerServiceImpl implements CustomerService {
   @Override
   public CustomerDTO authenticateCustomer(Integer customerId, String firstName, String lastName)
       throws BackyardWeddingException {
-    Customer customer = customerRepository.findById(customerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
+    // Customer customer = customerRepository.findById(customerId).orElseThrow(
+    //     () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
 
-    if (!firstName.equals(customer.getFirstName()) || !lastName.equals(customer.getLastName())) {
-      throw new BackyardWeddingException("SERVICE ERROR: incorrect first or last name");
-    }
+    // if (!firstName.equals(customer.getFirstName()) || !lastName.equals(customer.getLastName())) {
+    //   throw new BackyardWeddingException("SERVICE ERROR: incorrect first or last name");
+    // }
 
-    CustomerDTO customerDTO = new CustomerDTO();
-    // customerDTO.setCustomerId(customer.getCustomerId());
-    customerDTO.setFirstName(customer.getFirstName());
-    customerDTO.setLastName(customer.getLastName());
+    // CustomerDTO customerDTO = new CustomerDTO();
+    // // customerDTO.setCustomerId(customer.getCustomerId());
+    // customerDTO.setFirstName(customer.getFirstName());
+    // customerDTO.setLastName(customer.getLastName());
 
-    return customerDTO;
+    // return customerDTO;
+    return null;
+
   }
 
   public String deleteCustomerById(Integer customerId) throws BackyardWeddingException {
-    Customer customer = customerRepository.findById(customerId)
-        .orElseThrow(() -> new BackyardWeddingException("Could not find customer with that ID"));
-    customerRepository.delete(customer);
-    return "Service: customer deleted successfully.";
+    // Customer customer = customerRepository.findById(customerId)
+    //     .orElseThrow(() -> new BackyardWeddingException("Could not find customer with that ID"));
+    // customerRepository.delete(customer);
+    // return "Service: customer deleted successfully.";
+    return null;
+
   }
 
   // ==================================================================================================================
   @Override
   public Integer addEventByCustomerId(Integer customerId, EventDTO eventDTO) throws BackyardWeddingException {
-    Customer customer = customerRepository.findById(customerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
+    // Customer customer = customerRepository.findById(customerId).orElseThrow(
+    //     () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
 
-    List<Event> listOfCustomerEvents = customer.getEvents();
+    // List<Event> listOfCustomerEvents = customer.getEvents();
 
-    Event newEvent = new Event();
-    newEvent.setEventName(eventDTO.getEventName());
-    newEvent.setEventDate(eventDTO.getEventDate());
-    // newEvent.setCustomerId(customerId);
+    // Event newEvent = new Event();
+    // newEvent.setEventName(eventDTO.getEventName());
+    // newEvent.setEventDate(eventDTO.getEventDate());
+    // // newEvent.setCustomerId(customerId);
 
-    newEvent.setBackyardId(eventDTO.getBackyardId());
+    // newEvent.setBackyardId(eventDTO.getBackyardId());
 
-    Event newEventInDB = eventRepository.save(newEvent);
-    listOfCustomerEvents.add(newEvent);
-    customer.setEvents(listOfCustomerEvents);
-    customerRepository.save(customer);
+    // Event newEventInDB = eventRepository.save(newEvent);
+    // listOfCustomerEvents.add(newEvent);
+    // customer.setEvents(listOfCustomerEvents);
+    // customerRepository.save(customer);
 
-    return newEventInDB.getEventId();
+    // return newEventInDB.getEventId();
+
+    return null;
   }
 
   @Override
   public List<EventDTO> getEventsByCustomerId(Integer customerId) throws BackyardWeddingException {
-    Customer customer = customerRepository.findById(customerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
+    // Customer customer = customerRepository.findById(customerId).orElseThrow(
+    //     () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
 
-    List<Event> events = customer.getEvents();
+    // List<Event> events = customer.getEvents();
 
-    List<EventDTO> listEvents = new LinkedList<EventDTO>();
-    for (Event event : events) {
-      EventDTO dto = new EventDTO();
-      dto.setEventId(event.getEventId());
-      dto.setEventName(event.getEventName());
-      dto.setEventDate(event.getEventDate());
+    // List<EventDTO> listEvents = new LinkedList<EventDTO>();
+    // for (Event event : events) {
+    //   EventDTO dto = new EventDTO();
+    //   dto.setEventId(event.getEventId());
+    //   dto.setEventName(event.getEventName());
+    //   dto.setEventDate(event.getEventDate());
 
-      dto.setBackyardId(event.getBackyardId());
-      // dto.setCustomerId(event.getCustomerId());
-      listEvents.add(dto);
-    }
-    return listEvents;
+    //   dto.setBackyardId(event.getBackyardId());
+    //   // dto.setCustomerId(event.getCustomerId());
+    //   listEvents.add(dto);
+    // }
+    // return listEvents;
+    return null;
+
   }
 
   @Override
@@ -163,28 +178,30 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public CustomerDTO getCustomerById(Integer customerId) throws BackyardWeddingException {
-    Customer customer = customerRepository.findById(customerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
+    // Customer customer = customerRepository.findById(customerId).orElseThrow(
+    //     () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer with that customerId."));
 
-    CustomerDTO customerDTO = new CustomerDTO();
-    // customerDTO.setCustomerId(customer.getCustomerId());
-    customerDTO.setFirstName(customer.getFirstName());
-    customerDTO.setLastName(customer.getLastName());
+    // CustomerDTO customerDTO = new CustomerDTO();
+    // // customerDTO.setCustomerId(customer.getCustomerId());
+    // customerDTO.setFirstName(customer.getFirstName());
+    // customerDTO.setLastName(customer.getLastName());
 
-    List<Event> customerEvents = customer.getEvents();
-    // copy list entity to list dto
-    List<EventDTO> customerEventsDTO = customerEvents.stream().map(entity -> {
-      EventDTO dto = new EventDTO();
-      dto.setEventId(entity.getEventId());
-      dto.setEventName(entity.getEventName());
-      dto.setEventDate(entity.getEventDate());
-      dto.setBackyardId(entity.getBackyardId());
-      return dto;
-    }).collect(Collectors.toList());
+    // List<Event> customerEvents = customer.getEvents();
+    // // copy list entity to list dto
+    // List<EventDTO> customerEventsDTO = customerEvents.stream().map(entity -> {
+    //   EventDTO dto = new EventDTO();
+    //   dto.setEventId(entity.getEventId());
+    //   dto.setEventName(entity.getEventName());
+    //   dto.setEventDate(entity.getEventDate());
+    //   dto.setBackyardId(entity.getBackyardId());
+    //   return dto;
+    // }).collect(Collectors.toList());
 
-    customerDTO.setCustomerEvents(customerEventsDTO);
+    // customerDTO.setCustomerEvents(customerEventsDTO);
 
-    return customerDTO;
+    // return customerDTO;
+    return null;
+
   }
 
   @Override

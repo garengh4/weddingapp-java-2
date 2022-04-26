@@ -29,7 +29,7 @@ public class Partner {
   // backyard table have partner_id
   @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "partner_email_id")
-  private List<Backyard> backyards;
+  private List<Backyard> partnerBackyards;
   // -----------------------------------------------------------------------------------------------------------
 
   public String getPartnerEmailId() {
@@ -64,13 +64,14 @@ public class Partner {
     this.password = password;
   }
 
-  public List<Backyard> getBackyards() {
-    return backyards;
+  public List<Backyard> getPartnerBackyards() {
+    return partnerBackyards;
   }
 
-  public void setBackyards(List<Backyard> backyards) {
-    this.backyards = backyards;
+  public void setPartnerBackyards(List<Backyard> partnerBackyards) {
+    this.partnerBackyards = partnerBackyards;
   }
+
 
 
 }

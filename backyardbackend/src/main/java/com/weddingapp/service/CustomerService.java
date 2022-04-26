@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public interface CustomerService {
 
-  Integer registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException;
+  // no modifiers because all sub-class in same package.
+
+  String registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException;
   List<CustomerDTO> getAllCustomer() throws BackyardWeddingException;
   CustomerDTO authenticateCustomer(Integer customerId, String firstName, String lastName) throws BackyardWeddingException;
   String deleteCustomerById(Integer customerId) throws BackyardWeddingException;
