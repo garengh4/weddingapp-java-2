@@ -16,7 +16,7 @@ public interface CustomerService {
 
   String registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException;
   List<CustomerDTO> getAllCustomer() throws BackyardWeddingException;
-  CustomerDTO authenticateCustomer(Integer customerId, String firstName, String lastName) throws BackyardWeddingException;
+  CustomerDTO authenticateCustomer(String emailId, String password) throws BackyardWeddingException;
   String deleteCustomerById(Integer customerId) throws BackyardWeddingException;
 
   Integer addEventByCustomerId(Integer customerId, EventDTO eventDTO) throws BackyardWeddingException;
