@@ -68,9 +68,8 @@ public class CustomerServiceImpl implements CustomerService {
   }
 
   @Override
-  public CustomerDTO authenticateCustomer(String emailId, String password) throws BackyardWeddingException {
-
-    Customer customer = customerRepository.findById(emailId)
+  public CustomerDTO authenticateCustomer(String customerEmailId, String password) throws BackyardWeddingException {
+    Customer customer = customerRepository.findById(customerEmailId)
         .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
 
     if (!password.equals(customer.getPassword())) {
@@ -97,74 +96,82 @@ public class CustomerServiceImpl implements CustomerService {
 
   }
 
-  public String deleteCustomerById(Integer customerId) throws BackyardWeddingException {
-    // Customer customer = customerRepository.findById(customerId)
-    // .orElseThrow(() -> new BackyardWeddingException("Could not find customer with
-    // that ID"));
-    // customerRepository.delete(customer);
-    // return "Service: customer deleted successfully.";
-    return null;
+  public String deleteCustomer(String customerEmailId) throws BackyardWeddingException {
+    Customer customer = customerRepository.findById(customerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
+
+    if (!customer.getCustomerEvents().isEmpty()) {
+      throw new BackyardWeddingException("CustomerService.DELETE_CUSTOMER_INVALID");
+    }
+
+    customerRepository.delete(customer);
+    return customerEmailId;
 
   }
 
   // ==================================================================================================================
   @Override
-  public Integer addEventByCustomerId(Integer customerId, EventDTO eventDTO) throws BackyardWeddingException {
-    // Customer customer = customerRepository.findById(customerId).orElseThrow(
-    // () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer
-    // with that customerId."));
+  public Integer addEventToCustomer(String customerEmailId, EventDTO eventDTO) throws BackyardWeddingException {
+    Customer customer = customerRepository.findById(customerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
 
-    // List<Event> listOfCustomerEvents = customer.getEvents();
+    List<Event> listOfCustomerEvents = customer.getCustomerEvents();
 
-    // Event newEvent = new Event();
-    // newEvent.setEventName(eventDTO.getEventName());
-    // newEvent.setEventDate(eventDTO.getEventDate());
-    // // newEvent.setCustomerId(customerId);
+    Event newEvent = new Event();
+    newEvent.setCustomerEmailId(customerEmailId);
+    newEvent.setEventName(eventDTO.getEventName());
+    newEvent.setEventDescription(eventDTO.getEventDescription());
+    newEvent.setEventDate(eventDTO.getEventDate());
+    newEvent.setBackyardId(eventDTO.getBackyardId());
 
-    // newEvent.setBackyardId(eventDTO.getBackyardId());
+    Event newEventInDB = eventRepository.save(newEvent);
+    listOfCustomerEvents.add(newEvent);
+    customer.setCustomerEvents(listOfCustomerEvents);
+    customerRepository.save(customer);
 
-    // Event newEventInDB = eventRepository.save(newEvent);
-    // listOfCustomerEvents.add(newEvent);
-    // customer.setEvents(listOfCustomerEvents);
-    // customerRepository.save(customer);
-
-    // return newEventInDB.getEventId();
-
-    return null;
+    return newEventInDB.getEventId();
   }
 
   @Override
-  public List<EventDTO> getEventsByCustomerId(Integer customerId) throws BackyardWeddingException {
-    // Customer customer = customerRepository.findById(customerId).orElseThrow(
-    // () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer
-    // with that customerId."));
+  public List<EventDTO> getCustomerEvents(String customerEmailId) throws BackyardWeddingException {
+    Customer customer = customerRepository.findById(customerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
 
-    // List<Event> events = customer.getEvents();
+    List<Event> events = customer.getCustomerEvents();
 
-    // List<EventDTO> listEvents = new LinkedList<EventDTO>();
-    // for (Event event : events) {
-    // EventDTO dto = new EventDTO();
-    // dto.setEventId(event.getEventId());
-    // dto.setEventName(event.getEventName());
-    // dto.setEventDate(event.getEventDate());
-
-    // dto.setBackyardId(event.getBackyardId());
-    // // dto.setCustomerId(event.getCustomerId());
-    // listEvents.add(dto);
-    // }
-    // return listEvents;
-    return null;
+    // convert events to eventsDTO
+    List<EventDTO> eventsDTO = new LinkedList<EventDTO>();
+    for (Event event : events) {
+      EventDTO dto = new EventDTO();
+      dto.setEventId(event.getEventId());
+      dto.setEventName(event.getEventName());
+      dto.setEventDescription(event.getEventDescription());
+      dto.setEventDate(event.getEventDate());
+      dto.setCustomerEmailId(customerEmailId);
+      dto.setBackyardId(event.getBackyardId());
+      eventsDTO.add(dto);
+    }
+    return eventsDTO;
 
   }
 
   @Override
-  public String deleteEventById(Integer eventId) throws BackyardWeddingException {
-    Event eventToRemove = eventRepository.findById(eventId)
-        .orElseThrow(() -> new BackyardWeddingException("SERVICE ERROR: Could not find event with that eventId"));
+  public Integer deleteCustomerEvent(String customerEmailId, Integer eventId) throws BackyardWeddingException {
+    Customer customer = customerRepository.findById(customerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
 
-    eventRepository.delete(eventToRemove);
+    List<Event> events = customer.getCustomerEvents();
 
-    return "SERVICE: event removed successfully.";
+    for (Event event : events) {
+      if (event.getEventId().equals(eventId)) {
+        events.remove(event);
+        customer.setCustomerEvents(events);
+      }
+    }
+    // eventRepository.findById(eventId)
+    //     .orElseThrow(() -> new BackyardWeddingException("CustomerService.EVENT_NOT_FOUND"));
+
+    return eventId;
   }
 
   // ============================================================================================================================

@@ -2,6 +2,8 @@ package com.weddingapp.api;
 
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
+
 import com.weddingapp.dto.BackyardDTO;
 import com.weddingapp.dto.CustomerDTO;
 import com.weddingapp.dto.EventDTO;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/customer-api")
+@Validated
 public class CustomerAPI {
 
   @Autowired
@@ -32,60 +36,64 @@ public class CustomerAPI {
   @Autowired
   CustomerService customerService;
 
-  @PostMapping(value = "/register")
+  @PostMapping(value = "/customer/register")
   public ResponseEntity<String> registerNewCustomer(@RequestBody CustomerDTO customerDTO)
       throws BackyardWeddingException {
     String registeredWithEmailId = customerService.registerNewCustomer(customerDTO);
-    registeredWithEmailId = environment.getProperty("CustomerAPI.CUSTOMER_REGISTRATION_SUCCESS")
+    registeredWithEmailId = environment.getProperty("CustomerAPI.REGISTRATION_SUCCESS")
         + registeredWithEmailId;
     return new ResponseEntity<>(registeredWithEmailId, HttpStatus.CREATED);
   }
 
-  @GetMapping(value = "/getall")
+  @GetMapping(value = "/customer/getall")
   public ResponseEntity<List<CustomerDTO>> getAllCustomers() throws BackyardWeddingException {
     List<CustomerDTO> response = customerService.getAllCustomer();
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
-  @PostMapping(value = "/authenticate")
-  public ResponseEntity<CustomerDTO> authenticateCustomer(@RequestBody CustomerDTO customerDTO) throws BackyardWeddingException {
+  @PostMapping(value = "/customer/authenticate")
+  public ResponseEntity<CustomerDTO> authenticateCustomer(@RequestBody CustomerDTO customerDTO)
+      throws BackyardWeddingException {
     CustomerDTO dto = customerService.authenticateCustomer(customerDTO.getCustomerEmailId(), customerDTO.getPassword());
     return new ResponseEntity<>(dto, HttpStatus.OK);
   }
 
-  // @DeleteMapping(value = "/delete/{customerId}")
-  // public ResponseEntity<String> deleteCustomerById(@PathVariable(name =
-  // "customerId") Integer customerId)
-  // throws BackyardWeddingException {
-  // String successMsg = customerService.deleteCustomerById(customerId);
-  // return new ResponseEntity<>(successMsg, HttpStatus.OK);
-  // }
+  @DeleteMapping(value = "/customer/{customerEmailId:.+}/delete")
+  public ResponseEntity<String> deleteCustomer(
+      @Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}") @PathVariable(name = "customerEmailId") String customerEmailId)
+      throws BackyardWeddingException {
+    String deleteWithEmailId = customerService.deleteCustomer(customerEmailId);
+    deleteWithEmailId = environment.getProperty("CustomerAPI.DELETE_CUSTOMER_SUCCESS") + deleteWithEmailId;
+    return new ResponseEntity<>(deleteWithEmailId, HttpStatus.OK);
+  }
 
-  // @PostMapping(value = "/addevent/{customerId}")
-  // public ResponseEntity<String> addEventByCustomerId(@PathVariable(name =
-  // "customerId") Integer customerId,
-  // @RequestBody EventDTO eventDTO) throws BackyardWeddingException {
-  // Integer newEventId = customerService.addEventByCustomerId(customerId,
-  // eventDTO);
-  // String successMsg = "New event added with new eventId: " + newEventId;
-  // return new ResponseEntity<>(successMsg, HttpStatus.CREATED);
-  // }
+  @PostMapping(value = "/event/{customerEmailId:.+}/add")
+  public ResponseEntity<String> addEventToCustomer(
+      @Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}") @PathVariable(name = "customerEmailId") String customerEmailId,
+      @RequestBody EventDTO eventDTO) throws BackyardWeddingException {
 
-  // @GetMapping(value = "/getallevents/{customerId}")
-  // public ResponseEntity<List<EventDTO>>
-  // getEventsByCustomerId(@PathVariable("customerId") Integer customerId)
-  // throws BackyardWeddingException {
-  // List<EventDTO> eventDtoList =
-  // customerService.getEventsByCustomerId(customerId);
-  // return new ResponseEntity<>(eventDtoList, HttpStatus.OK);
-  // }
+    Integer newEventId = customerService.addEventToCustomer(customerEmailId, eventDTO);
+    String successMsg = environment.getProperty("CustomerAPI.ADD_EVENT_SUCCESS") + newEventId;
+    return new ResponseEntity<>(successMsg, HttpStatus.CREATED);
+  }
 
-  // @DeleteMapping(value = "/deleteevent/{eventId}")
-  // public ResponseEntity<String> deleteEventById(
-  // @PathVariable("eventId") Integer eventId) throws BackyardWeddingException {
-  // String successMsg = customerService.deleteEventById(eventId);
-  // return new ResponseEntity<>(successMsg, HttpStatus.OK);
-  // }
+  @GetMapping(value = "/event/{customerEmailId:.+}/getall")
+  public ResponseEntity<List<EventDTO>> getCustomerEvents(
+      @Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}") @PathVariable(name = "customerEmailId") String customerEmailId)
+      throws BackyardWeddingException {
+    List<EventDTO> eventsDTO = customerService.getCustomerEvents(customerEmailId);
+    return new ResponseEntity<>(eventsDTO, HttpStatus.OK);
+  }
+
+  @DeleteMapping(value = "/event/{customerEmailId:.+}/delete/{eventId}")
+  public ResponseEntity<String> deleteCustomerEvent(
+      @Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}") @PathVariable(name = "customerEmailId") String customerEmailId,
+      @PathVariable(name = "eventId")Integer eventId) throws BackyardWeddingException {
+
+    Integer deletedEventId = customerService.deleteCustomerEvent(customerEmailId, eventId);
+    String successMsg = environment.getProperty("CustomerAPI.DELETE_EVENT_SUCCESS") + deletedEventId;
+    return new ResponseEntity<>(successMsg, HttpStatus.OK);
+  }
 
   // @GetMapping(value = "/getallbackyards")
   // public ResponseEntity<List<BackyardDTO>> getAllBackyards() throws

@@ -55,11 +55,17 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- for dto validation & customized error message -->
+    <!-- for customized error message -->
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
       <version>2.0.1.Final</version>
+    </dependency>
+
+    <!-- for @Pattern validation towards ValidationMessages.properties -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
     </dependency>
 
   </dependencies>
