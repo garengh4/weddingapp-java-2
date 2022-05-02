@@ -82,6 +82,7 @@ public class CustomerServiceImpl implements CustomerService {
     customerDTO.setLastName(customer.getLastName());
     customerDTO.setPassword(customer.getPassword());
 
+    // customerEvent to customerEventDTO
     List<EventDTO> customerEventsDTO = customer.getCustomerEvents().stream().map(entity -> {
       EventDTO eventDTO = new EventDTO();
       eventDTO.setEventId(entity.getEventId());
@@ -159,18 +160,18 @@ public class CustomerServiceImpl implements CustomerService {
   public Integer deleteCustomerEvent(String customerEmailId, Integer eventId) throws BackyardWeddingException {
     Customer customer = customerRepository.findById(customerEmailId)
         .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
-
     List<Event> events = customer.getCustomerEvents();
 
-    for (Event event : events) {
-      if (event.getEventId().equals(eventId)) {
-        events.remove(event);
+    for (Event currentEvent : events) {
+      if (currentEvent.getEventId().equals(eventId)) {
+        events.remove(currentEvent);
         customer.setCustomerEvents(events);
+        eventRepository.delete(currentEvent);
+        break;
+      } else {
+        throw new BackyardWeddingException("CustomerService.EVENT_NOT_FOUND");
       }
     }
-    // eventRepository.findById(eventId)
-    //     .orElseThrow(() -> new BackyardWeddingException("CustomerService.EVENT_NOT_FOUND"));
-
     return eventId;
   }
 
