@@ -46,107 +46,125 @@ public class CustomerServiceTest {
     Assertions.assertEquals("clairebear@gmail.com", returned);
   }
 
-  // @Test
-  // public void getAllCustomerValidTest() throws BackyardWeddingException {
-  //   List<Customer> listOfCustomersInDB = new ArrayList<>();
-  //   Customer customerOne = new Customer();
-  //   // customerOne.setCustomerId(1);
-  //   customerOne.setFirstName("Deborah");
-  //   customerOne.setLastName("Yue");
-  //   Customer customerTwo = new Customer();
-  //   // customerTwo.setCustomerId(2);
-  //   customerTwo.setFirstName("Claire");
-  //   customerTwo.setLastName("Bear");
-  //   listOfCustomersInDB.add(customerOne);
-  //   listOfCustomersInDB.add(customerTwo);
-  //   Mockito.when(customerRepository.findAll()).thenReturn(listOfCustomersInDB);
+  @Test
+  public void getAllCustomerValidTest() throws BackyardWeddingException {
+    List<Customer> listOfCustomersInDB = new ArrayList<>();
+    Customer customerOne = new Customer();
+    customerOne.setCustomerEmailId("deborahyue@gmail.com");
+    customerOne.setFirstName("Deborah");
+    customerOne.setLastName("Yue");
+    Customer customerTwo = new Customer();
+    customerTwo.setCustomerEmailId("clairebear@gmail.com");
+    customerTwo.setFirstName("Claire");
+    customerTwo.setLastName("Bear");
+    listOfCustomersInDB.add(customerOne);
+    listOfCustomersInDB.add(customerTwo);
+    Mockito.when(customerRepository.findAll()).thenReturn(listOfCustomersInDB);
 
-  //   List<CustomerDTO> returned = customerService.getAllCustomer();
-  //   Assertions.assertEquals(2, returned.size());
-  // }
+    List<CustomerDTO> returned = customerService.getAllCustomer();
+    Assertions.assertEquals(2, returned.size());
+  }
 
-  // @Test
-  // public void authenticateCustomerValidTest() throws BackyardWeddingException {
-  //   Customer customerInDB = new Customer();
-  //   // customerInDB.setCustomerId(98);
-  //   customerInDB.setFirstName("Deborah");
-  //   customerInDB.setLastName("Yue");
-  //   Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
+  @Test
+  public void authenticateCustomerValidTest() throws BackyardWeddingException {
 
-  //   Integer userId = 98;
-  //   String firstName = "Deborah";
-  //   String lastName = "Yue";
+    Customer customer = new Customer();
+    String emailIdFromDB = "deborahyue@gmail.com";
+    String passwordFromDB = "Deborah@123";
+    customer.setCustomerEmailId(emailIdFromDB);
+    customer.setPassword(passwordFromDB);
+    Optional<Customer> optionalCustomer = Optional.of(customer);
 
-  //   CustomerDTO returned = customerService.authenticateCustomer(userId, firstName, lastName);
-  //   Assertions.assertEquals(98, returned.getCustomerId());
-  // }
+    String emailId = "deborahyue@gmail.com";
+    String password = "Deborah@123";
 
-  // @Test
-  // public void deleteCustomerByIdValidTest() throws BackyardWeddingException {
-  //   Customer customerInDB = new Customer();
-  //   // customerInDB.setCustomerId(1);
-  //   customerInDB.setFirstName("Deborah");
-  //   customerInDB.setLastName("Yue");
-  //   Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
+    Mockito.when(customerRepository.findById(emailId.toLowerCase())).thenReturn(optionalCustomer);
+    Assertions.assertEquals(emailIdFromDB,
+        customerService.authenticateCustomer(emailId, password).getCustomerEmailId());
 
-  //   String returned = customerService.deleteCustomerById(1);
-  //   Assertions.assertEquals("Service: customer deleted successfully.", returned);
-  // }
-  // // ============================================================================================================================
-  // // Testing event functions
-  
-  // @Test
-  // public void addEventByCustomerIdValidTest() throws BackyardWeddingException {
-  //   Event returnedEventAfterSave = new Event();
-  //   returnedEventAfterSave.setEventId(1);
-  //   returnedEventAfterSave.setEventName("resulting event upon eventRepository.save");
-  //   Mockito.when(eventRepository.save(Mockito.any())).thenReturn(returnedEventAfterSave);
+  }
 
-  //   Customer customerInDB = new Customer();
-  //   // customerInDB.setCustomerId(99);
-  //   customerInDB.setFirstName("resulting customer upon customerRepository.findById");
-  //   List<Event> listOfEvents = new ArrayList<>();
-  //   listOfEvents.add(returnedEventAfterSave);
-  //   customerInDB.setEvents(listOfEvents);
-  //   Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
+  @Test
+  public void deleteCustomerValidTest() throws BackyardWeddingException {
+    Customer customerInDB = new Customer();
+    customerInDB.setCustomerEmailId("deborahyue@gmail.com");
+    customerInDB.setFirstName("Deborah");
+    customerInDB.setLastName("Yue");
+    Mockito.when(customerRepository.findById(Mockito.anyString())).thenReturn(Optional.of(customerInDB));
 
-  //   EventDTO newEvent = new EventDTO();
-  //   newEvent.setEventName("the joining of two houses");
-  //   newEvent.setBackyardId(15);
+    String returned = customerService.deleteCustomer("deborahyue@gmail.com");
+    Assertions.assertEquals("deborahyue@gmail.com", returned);
+  }
 
-  //   Integer returned = customerService.addEventByCustomerId(99, newEvent);
-  //   Assertions.assertEquals(1, returned);
-  // }
+  // ============================================================================================================================
+  // Testing event functions
 
-  // @Test
-  // public void getEventByCustomerIdValidTest() throws BackyardWeddingException {
-  //   List<Event> eventsInDB = new ArrayList<>();
-  //   Event eventOne = new Event();
-  //   eventOne.setEventId(1);
-  //   Event eventTwo = new Event();
-  //   eventTwo.setEventId(2);
-  //   eventsInDB.add(eventOne);
-  //   eventsInDB.add(eventTwo);
-  //   Customer customerInDB = new Customer();
-  //   // customerInDB.setCustomerId(1);
-  //   customerInDB.setFirstName("resulting customer object upon customerRepository.findById");
-  //   customerInDB.setEvents(eventsInDB);
-  //   Mockito.when(customerRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(customerInDB));
+  @Test
+  public void addEventToCustomerValidTest() throws BackyardWeddingException {
 
-  //   List<EventDTO> returned = customerService.getEventsByCustomerId(1);
-  //   Assertions.assertEquals(2, returned.size());
-  // }
+    // if successfully added, return added results
+    EventDTO newEventDTO = new EventDTO();
+    newEventDTO.setEventName("incoming new event");
+    newEventDTO.setEventId(24);
 
-  // @Test
-  // public void deleteEventByIdValidTest() throws BackyardWeddingException{
-  //   Event eventInDB = new Event();
-  //   eventInDB.setEventId(22);
-  //   Mockito.when(eventRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(eventInDB));
+    Event newEvent = new Event();
+    newEvent.setEventId(newEventDTO.getEventId());
+    newEvent.setEventName(newEventDTO.getEventName());
+    List<Event> customerNewEvent = new ArrayList<>();
+    customerNewEvent.add(newEvent);
 
-  //   String returned = customerService.deleteEventById(22);
-  //   Assertions.assertEquals("SERVICE: event removed successfully.", returned);
-  // }
+    Customer addedEventCustomer = new Customer();
+    addedEventCustomer.setCustomerEmailId("deborahyue@gmail.com");
+    addedEventCustomer.setCustomerEvents(customerNewEvent);
+    Mockito.when(customerRepository.save(Mockito.any())).thenReturn(addedEventCustomer);
 
+    // setup no-event customer
+    Customer noEventCustomer = new Customer();
+    noEventCustomer.setCustomerEmailId("deborahyue@gmail.com");
+    noEventCustomer.setCustomerEvents(new ArrayList<>());
+    Mockito.when(customerRepository.findById(Mockito.anyString())).thenReturn(Optional.of(noEventCustomer));
 
+    Integer newEventId = customerService.addEventToCustomer("deborahyue@gmail.com", newEventDTO);
+    Assertions.assertEquals(24, newEventId);
+
+  }
+
+  @Test
+  public void getEventByCustomerIdValidTest() throws BackyardWeddingException {
+
+    List<Event> eventsInDB = new ArrayList<>();
+    Event eventOne = new Event();
+    eventOne.setEventId(1);
+    Event eventTwo = new Event();
+    eventTwo.setEventId(2);
+    eventsInDB.add(eventOne);
+    eventsInDB.add(eventTwo);
+
+    Customer customerInDB = new Customer();
+    customerInDB.setCustomerEmailId("deborahyue@gmail.com");
+    customerInDB.setFirstName("resulting customer object upon customerRepository.findById");
+    customerInDB.setCustomerEvents(eventsInDB);
+    Mockito.when(customerRepository.findById(Mockito.anyString())).thenReturn(Optional.of(customerInDB));
+
+    List<EventDTO> returned = customerService.getCustomerEvents("deborahyue@gmail.com");
+    Assertions.assertEquals(2, returned.size());
+  }
+
+  @Test
+  public void deleteCustomerEventValidTest() throws BackyardWeddingException {
+    Customer customerInDB = new Customer();
+    customerInDB.setCustomerEmailId("deborahyue@gmail.com");
+
+    List<Event> eventsInDB = new ArrayList<>();
+    Event eventOne = new Event();
+    eventOne.setEventId(220);
+    eventsInDB.add(eventOne);
+
+    customerInDB.setCustomerEvents(eventsInDB);
+    Mockito.when(customerRepository.findById(Mockito.anyString())).thenReturn(Optional.of(customerInDB));
+
+    Integer deletedEventId = customerService.deleteCustomerEvent("deborahyue@gmail.com", 220);
+    Assertions.assertEquals(220, deletedEventId);
+  }
 
 }

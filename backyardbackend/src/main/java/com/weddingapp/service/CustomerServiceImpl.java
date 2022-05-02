@@ -82,26 +82,28 @@ public class CustomerServiceImpl implements CustomerService {
     customerDTO.setLastName(customer.getLastName());
     customerDTO.setPassword(customer.getPassword());
 
-    // customerEvent to customerEventDTO
-    List<EventDTO> customerEventsDTO = customer.getCustomerEvents().stream().map(entity -> {
-      EventDTO eventDTO = new EventDTO();
-      eventDTO.setEventId(entity.getEventId());
-      eventDTO.setEventName(entity.getEventName());
-      eventDTO.setEventDescription(entity.getEventName());
-      eventDTO.setEventDate(entity.getEventDate());
-      return eventDTO;
-    }).collect(Collectors.toList());
+    // if-condition needed for mockito
+    if (customer.getCustomerEvents() != null && !customer.getCustomerEvents().isEmpty()) {
+      // customerEvent to customerEventDTO
+      List<EventDTO> customerEventsDTO = customer.getCustomerEvents().stream().map(entity -> {
+        EventDTO eventDTO = new EventDTO();
+        eventDTO.setEventId(entity.getEventId());
+        eventDTO.setEventName(entity.getEventName());
+        eventDTO.setEventDescription(entity.getEventName());
+        eventDTO.setEventDate(entity.getEventDate());
+        return eventDTO;
+      }).collect(Collectors.toList());
 
-    customerDTO.setCustomerEvents(customerEventsDTO);
+      customerDTO.setCustomerEvents(customerEventsDTO);
+    }
     return customerDTO;
-
   }
 
   public String deleteCustomer(String customerEmailId) throws BackyardWeddingException {
     Customer customer = customerRepository.findById(customerEmailId)
         .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
 
-    if (!customer.getCustomerEvents().isEmpty()) {
+    if (customer.getCustomerEvents() != null && !customer.getCustomerEvents().isEmpty()) {
       throw new BackyardWeddingException("CustomerService.DELETE_CUSTOMER_INVALID");
     }
 
@@ -125,12 +127,16 @@ public class CustomerServiceImpl implements CustomerService {
     newEvent.setEventDate(eventDTO.getEventDate());
     newEvent.setBackyardId(eventDTO.getBackyardId());
 
-    Event newEventInDB = eventRepository.save(newEvent);
+    // Event newEventInDB = eventRepository.save(newEvent);
     listOfCustomerEvents.add(newEvent);
     customer.setCustomerEvents(listOfCustomerEvents);
-    customerRepository.save(customer);
+    Customer customerAfterSave = customerRepository.save(customer);
 
-    return newEventInDB.getEventId();
+    // get back last event after save (id should be auto_incremented)
+    List<Event> newListOfCustomerEvents = customerAfterSave.getCustomerEvents();
+    Event eventAfterSave = newListOfCustomerEvents.get(newListOfCustomerEvents.size()-1);
+
+    return eventAfterSave.getEventId();
   }
 
   @Override
