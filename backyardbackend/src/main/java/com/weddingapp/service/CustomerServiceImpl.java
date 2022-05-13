@@ -134,7 +134,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     // get back last event after save (id should be auto_incremented)
     List<Event> newListOfCustomerEvents = customerAfterSave.getCustomerEvents();
-    Event eventAfterSave = newListOfCustomerEvents.get(newListOfCustomerEvents.size()-1);
+    Event eventAfterSave = newListOfCustomerEvents.get(newListOfCustomerEvents.size() - 1);
 
     return eventAfterSave.getEventId();
   }

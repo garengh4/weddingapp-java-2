@@ -22,3 +22,15 @@ INSERT INTO event (event_name, event_description, event_date, customer_email_id,
     ("H&R junior", "gender reveal", "2024-04-23", "hadir@gmail.com", 002);              -- customer Hadi at Julia's backyard in Montreal
 
 
+--@block -- Get all events in backyard 1
+SELECT 
+    e.event_name
+FROM event e WHERE backyard_id = 1;
+
+--@block -- Get all customers registered to partner_id = 1
+SELECT 
+    c.first_name,
+    c.last_name
+FROM customer c
+INNER JOIN event e ON c.customer_email_id = e.customer_email_id
+WHERE e.backyard_id = 1;

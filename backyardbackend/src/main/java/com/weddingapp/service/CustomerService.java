@@ -23,7 +23,6 @@ public interface CustomerService {
   Integer deleteCustomerEvent(String customerEmailId, Integer eventId) throws BackyardWeddingException; 
   
   List<BackyardDTO> getAllBackyards() throws BackyardWeddingException;
-  
   CustomerDTO getCustomerById(Integer customerId) throws BackyardWeddingException;
   EventDTO updateEvent(EventDTO eventDto) throws BackyardWeddingException;
 
