@@ -1,22 +1,22 @@
-// package com.weddingapp.service;
+package com.weddingapp.service;
 
-// import java.util.List;
+import java.util.List;
 
-// import com.weddingapp.dto.BackyardDTO;
-// import com.weddingapp.dto.PartnerDTO;
-// import com.weddingapp.exception.BackyardWeddingException;
+import com.weddingapp.dto.BackyardDTO;
+import com.weddingapp.dto.PartnerDTO;
+import com.weddingapp.exception.BackyardWeddingException;
 
-// import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;
 
-// @Component
-// public interface PartnerService {
+@Component
+public interface PartnerService {
 
-//   Integer registerNewPartner(PartnerDTO partnerDTO) throws BackyardWeddingException; //returns newly added partnerId
-//   List<PartnerDTO> getAllPartner() throws BackyardWeddingException;
-//   PartnerDTO authenticatePartner(Integer partnerId, String firstName, String lastName) throws BackyardWeddingException;
-//   String deletePartnerById(Integer partnerId) throws BackyardWeddingException;
+  String registerNewPartner(PartnerDTO partnerDTO) throws BackyardWeddingException; //returns newly added partnerId
+  List<PartnerDTO> getAllPartner() throws BackyardWeddingException;
+  PartnerDTO authenticatePartner(String emailId, String password) throws BackyardWeddingException;
+  String deletePartner(String partnerEmailId) throws BackyardWeddingException;
 
-//   Integer addBackyardByPartnerId(Integer partnerId, BackyardDTO backyardDTO) throws BackyardWeddingException; //returns newly added backyardId.
-//   List<BackyardDTO> getBackyardsByPartnerId(Integer partnerId) throws BackyardWeddingException;
-//   String deleteBackyardById(Integer backyardId) throws BackyardWeddingException; //returns success message
-// }
+  Integer addBackyardToPartner(String partnerEmailId, BackyardDTO backyardDTO) throws BackyardWeddingException; //returns newly added backyardId.
+  List<BackyardDTO> getPartnerBackyards(String partnerEmailId) throws BackyardWeddingException;
+  String deletePartnerBackyard(String partnerEmailId, Integer backyardId) throws BackyardWeddingException; //returns success message
+}

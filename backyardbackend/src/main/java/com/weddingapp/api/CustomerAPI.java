@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.validation.constraints.Pattern;
 
-import com.weddingapp.dto.BackyardDTO;
 import com.weddingapp.dto.CustomerDTO;
 import com.weddingapp.dto.EventDTO;
 import com.weddingapp.exception.BackyardWeddingException;

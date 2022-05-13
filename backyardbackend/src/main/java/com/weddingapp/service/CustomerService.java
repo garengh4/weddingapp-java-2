@@ -2,7 +2,6 @@ package com.weddingapp.service;
 
 import java.util.List;
 
-import com.weddingapp.dto.BackyardDTO;
 import com.weddingapp.dto.CustomerDTO;
 import com.weddingapp.dto.EventDTO;
 import com.weddingapp.exception.BackyardWeddingException;
@@ -22,8 +21,4 @@ public interface CustomerService {
   List<EventDTO> getCustomerEvents(String customerEmailId) throws BackyardWeddingException;
   Integer deleteCustomerEvent(String customerEmailId, Integer eventId) throws BackyardWeddingException; 
   
-  List<BackyardDTO> getAllBackyards() throws BackyardWeddingException;
-  CustomerDTO getCustomerById(Integer customerId) throws BackyardWeddingException;
-  EventDTO updateEvent(EventDTO eventDto) throws BackyardWeddingException;
-
 }

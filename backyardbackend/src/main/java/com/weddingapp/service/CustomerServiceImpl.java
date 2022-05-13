@@ -4,14 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.weddingapp.dto.BackyardDTO;
 import com.weddingapp.dto.CustomerDTO;
 import com.weddingapp.dto.EventDTO;
-import com.weddingapp.entity.Backyard;
 import com.weddingapp.entity.Customer;
 import com.weddingapp.entity.Event;
 import com.weddingapp.exception.BackyardWeddingException;
-import com.weddingapp.repository.BackyardRepository;
 import com.weddingapp.repository.CustomerRepository;
 import com.weddingapp.repository.EventRepository;
 
@@ -28,9 +25,6 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Autowired
   private EventRepository eventRepository;
-
-  @Autowired
-  private BackyardRepository backyardRepository;
 
   @Override
   public String registerNewCustomer(CustomerDTO customerDTO) throws BackyardWeddingException {
@@ -53,6 +47,20 @@ public class CustomerServiceImpl implements CustomerService {
   public List<CustomerDTO> getAllCustomer() throws BackyardWeddingException {
     Iterable<Customer> customers = customerRepository.findAll();
 
+    // Linkedlist allows for constinat-time insertions/removal through iterators, but only sequentially.
+    // you can walk the list forward and backward but finding index is proportional to size of list. O(n)
+
+    // Adding/removing from head of LinkedList is O(1), but O(n) for ArrayList
+
+    // Arraylist allows fast random read access. element can be read at constant time.
+    // But adding/removing from anywhere but the end requires shifting all elements over
+
+    // Arraylist is growable array. technically already at full capacity and creates another array with a 
+    // size greater than previous
+
+    // LinkledList is fast for adding/deleting element but slow to access element
+    // ArrayList is foast for accessing specific element but can be slow to add/delete, especially in the middle.
+    
     // convert customers to customerDTOs
     List<CustomerDTO> customerDTOs = new LinkedList<CustomerDTO>();
     for (Customer c : customers) {
@@ -181,71 +189,6 @@ public class CustomerServiceImpl implements CustomerService {
     return eventId;
   }
 
-  // ============================================================================================================================
 
-  @Override
-  public List<BackyardDTO> getAllBackyards() throws BackyardWeddingException {
-    List<Backyard> backyardEntityList = (List<Backyard>) backyardRepository.findAll();
-    if (backyardEntityList.isEmpty()) {
-      throw new BackyardWeddingException("No backyards found.");
-    }
-
-    List<BackyardDTO> dtoList = new LinkedList<BackyardDTO>();
-    backyardEntityList.forEach(entity -> {
-      BackyardDTO dto = new BackyardDTO();
-      dto.setBackyardCity(entity.getBackyardCity());
-      dto.setBackyardCost(entity.getBackyardCost());
-      dto.setBackyardDescription(entity.getBackyardDescription());
-      dto.setBackyardId(entity.getBackyardId());
-      // dto.setPartnerId(entity.getPartnerId());
-      dtoList.add(dto);
-    });
-    return dtoList;
-  }
-
-  @Override
-  public CustomerDTO getCustomerById(Integer customerId) throws BackyardWeddingException {
-    // Customer customer = customerRepository.findById(customerId).orElseThrow(
-    // () -> new BackyardWeddingException("SERVICE ERROR: Could not find customer
-    // with that customerId."));
-
-    // CustomerDTO customerDTO = new CustomerDTO();
-    // // customerDTO.setCustomerId(customer.getCustomerId());
-    // customerDTO.setFirstName(customer.getFirstName());
-    // customerDTO.setLastName(customer.getLastName());
-
-    // List<Event> customerEvents = customer.getEvents();
-    // // copy list entity to list dto
-    // List<EventDTO> customerEventsDTO = customerEvents.stream().map(entity -> {
-    // EventDTO dto = new EventDTO();
-    // dto.setEventId(entity.getEventId());
-    // dto.setEventName(entity.getEventName());
-    // dto.setEventDate(entity.getEventDate());
-    // dto.setBackyardId(entity.getBackyardId());
-    // return dto;
-    // }).collect(Collectors.toList());
-
-    // customerDTO.setCustomerEvents(customerEventsDTO);
-
-    // return customerDTO;
-    return null;
-
-  }
-
-  @Override
-  public EventDTO updateEvent(EventDTO eventDto) throws BackyardWeddingException {
-    Event event = eventRepository.findById(eventDto.getEventId())
-        .orElseThrow(() -> new BackyardWeddingException("Event not found."));
-
-    event.setBackyardId(eventDto.getBackyardId());
-    // event.setCustomerId(eventDto.getCustomerId());
-    event.setEventDate(eventDto.getEventDate());
-    event.setEventId(eventDto.getEventId());
-    event.setEventName(eventDto.getEventName());
-
-    eventRepository.save(event);
-    return eventDto;
-
-  }
 
 }
