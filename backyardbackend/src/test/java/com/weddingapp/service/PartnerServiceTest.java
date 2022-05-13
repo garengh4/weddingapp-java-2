@@ -71,5 +71,15 @@ public class PartnerServiceTest {
     Assertions.assertEquals("clairebear@gmail.com", partnerService.authenticatePartner("clairebear@gmail.com", "Claire@123").getPartnerEmailId());
   }
 
+  @Test
+  public void deletePartnerValidTest() throws BackyardWeddingException {
+    Partner partner = new Partner();
+    partner.setPartnerEmailId("clairebear@gmail.com");
+    Mockito.when(partnerRepository.findById("clairebear@gmail.com")).thenReturn(Optional.of(partner));
+
+    String returned = partnerService.deletePartner("clairebear@gmail.com");
+    Assertions.assertEquals("clairebear@gmail.com", returned);
+  }
+
 
 }

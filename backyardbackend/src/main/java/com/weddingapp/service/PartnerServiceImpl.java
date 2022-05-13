@@ -95,8 +95,14 @@ public class PartnerServiceImpl implements PartnerService {
 
   @Override
   public String deletePartner(String partnerEmailId) throws BackyardWeddingException {
-    // TODO Auto-generated method stub
-    return null;
+    Partner partner = partnerRepository.findById(partnerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
+
+    if(partner.getPartnerBackyards() != null && !partner.getPartnerBackyards().isEmpty()) {
+      throw new BackyardWeddingException("PartnerService.DELETE_PARTNER_INVALID");
+    }
+    partnerRepository.delete(partner);
+    return partnerEmailId;
   }
 
   @Override
