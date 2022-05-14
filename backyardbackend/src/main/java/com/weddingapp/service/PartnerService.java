@@ -18,5 +18,5 @@ public interface PartnerService {
 
   Integer addBackyardToPartner(String partnerEmailId, BackyardDTO backyardDTO) throws BackyardWeddingException; //returns newly added backyardId.
   List<BackyardDTO> getPartnerBackyards(String partnerEmailId) throws BackyardWeddingException;
-  String deletePartnerBackyard(String partnerEmailId, Integer backyardId) throws BackyardWeddingException; //returns success message
+  Integer deletePartnerBackyard(String partnerEmailId, Integer backyardId) throws BackyardWeddingException; //returns success message
 }

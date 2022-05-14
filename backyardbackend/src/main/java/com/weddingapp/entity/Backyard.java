@@ -73,5 +73,13 @@ public class Backyard {
     this.backyardCost = backyardCost;
   }
 
+  public String getPartnerEmailId() {
+    return partnerEmailId;
+  }
+
+  public void setPartnerEmailId(String partnerEmailId) {
+    this.partnerEmailId = partnerEmailId;
+  }
+
 
 }

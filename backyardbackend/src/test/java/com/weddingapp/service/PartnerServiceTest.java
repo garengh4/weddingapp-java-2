@@ -82,4 +82,42 @@ public class PartnerServiceTest {
   }
 
 
+  // not too sure about this one when it comes to what to Mockito.any()
+  @Test
+  public void addBackyardToPartnerValidTest() throws BackyardWeddingException {
+    Partner partner = new Partner();
+    partner.setPartnerEmailId("clairebear@gmail.com");
+    List<Backyard> backyards = new ArrayList<>();
+    Backyard backyard = new Backyard();
+    backyard.setBackyardId(42);
+    backyards.add(backyard);
+    partner.setPartnerBackyards(backyards);
+    Mockito.when(partnerRepository.findById("clairebear@gmail.com")).thenReturn(Optional.of(partner));
+    
+    Backyard newBackyard = new Backyard();
+    Mockito.when(backyardRepository.save(Mockito.any())).thenReturn(newBackyard);
+
+    BackyardDTO newBackyardDTO = new BackyardDTO();
+    Integer newBackyardId = partnerService.addBackyardToPartner("clairebear@gmail.com", newBackyardDTO);
+    Assertions.assertEquals(43, newBackyardId);
+  }
+
+  @Test
+  public void getPartnerBackyardsValidTest() throws BackyardWeddingException {
+    Partner partner = new Partner();
+    partner.setPartnerEmailId("clairebear@gmail.com");
+
+    List<Backyard> backyards = new ArrayList<>();
+    Backyard backyardOne = new Backyard();
+    backyardOne.setBackyardId(1);
+
+    backyards.add(backyardOne);
+    partner.setPartnerBackyards(backyards);
+    
+    Mockito.when(partnerRepository.findById(Mockito.anyString())).thenReturn(Optional.of(partner));
+
+    List<BackyardDTO> backyardDTOs = partnerService.getPartnerBackyards("clairebear@gmail.com");
+    Assertions.assertEquals(1, backyardDTOs.size());
+  }
+
 }

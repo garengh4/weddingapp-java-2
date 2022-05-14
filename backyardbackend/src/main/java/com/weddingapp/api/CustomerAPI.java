@@ -66,6 +66,7 @@ public class CustomerAPI {
     return new ResponseEntity<>(deleteWithEmailId, HttpStatus.OK);
   }
 
+  // ==================================================================================================================
   @PostMapping(value = "/event/{customerEmailId:.+}/add")
   public ResponseEntity<String> addEventToCustomer(
       @Pattern(regexp = "[a-zA-Z0-9._]+@[a-zA-Z]{2,}\\.[a-zA-Z][a-zA-Z.]+", message = "{invalid.email.format}") @PathVariable(name = "customerEmailId") String customerEmailId,
@@ -93,31 +94,5 @@ public class CustomerAPI {
     String successMsg = environment.getProperty("CustomerAPI.DELETE_EVENT_SUCCESS") + deletedEventId;
     return new ResponseEntity<>(successMsg, HttpStatus.OK);
   }
-
-  // @GetMapping(value = "/getallbackyards")
-  // public ResponseEntity<List<BackyardDTO>> getAllBackyards() throws
-  // BackyardWeddingException {
-  // List<BackyardDTO> backyards = customerService.getAllBackyards();
-  // return new ResponseEntity<>(backyards, HttpStatus.OK);
-  // }
-
-  // //
-  // =============================================================================================================================================
-
-  // @GetMapping(value = "/getcustomer")
-  // public ResponseEntity<CustomerDTO> getCustomerWithId(@RequestBody CustomerDTO
-  // customerDTO)
-  // throws BackyardWeddingException {
-  // CustomerDTO returned =
-  // customerService.getCustomerById(customerDTO.getCustomerId());
-  // return new ResponseEntity<CustomerDTO>(returned, HttpStatus.OK);
-  // }
-
-  // @PostMapping(value = "/updateevent")
-  // public ResponseEntity<EventDTO> updateEvent(@RequestBody EventDTO eventDto)
-  // throws BackyardWeddingException {
-  // EventDTO dto = customerService.updateEvent(eventDto);
-  // return new ResponseEntity<>(dto, HttpStatus.OK);
-  // }
 
 }
