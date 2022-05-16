@@ -176,16 +176,17 @@ public class CustomerServiceImpl implements CustomerService {
         .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
     List<Event> events = customer.getCustomerEvents();
 
+    Event eventToRemove = null;
     for (Event currentEvent : events) {
       if (currentEvent.getEventId().equals(eventId)) {
-        events.remove(currentEvent);
-        customer.setCustomerEvents(events);
-        eventRepository.delete(currentEvent);
+        eventToRemove = currentEvent;
         break;
-      } else {
-        throw new BackyardWeddingException("CustomerService.EVENT_NOT_FOUND");
       }
     }
+    events.remove(eventToRemove);
+    customer.setCustomerEvents(events);
+    eventRepository.delete(eventToRemove);
+
     return eventId;
   }
 
