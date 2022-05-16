@@ -1,7 +1,6 @@
 package com.weddingapp.service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -147,25 +146,24 @@ public class PartnerServiceImpl implements PartnerService {
     Partner partner = partnerRepository.findById(partnerEmailId)
         .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
 
-    // TODO: why cant we do this (?)
-    // Backyard toBeRemoved = partner.getPartnerBackyards().stream().filter(e -> e.getBackyardId().equals(backyardId))
-    //     .findFirst().orElseThrow(() -> new BackyardWeddingException("PartnerService.BACKYARD_NOT_FOUND"));
-    // backyardRepository.delete(toBeRemoved);
-    // return toBeRemoved.getBackyardId();
-    
     List<Backyard> backyards = partner.getPartnerBackyards();
-    for(Backyard current: backyards) {
-      if(current.getBackyardId().equals(backyardId)) {
-        backyards.remove(current);
-        partner.setPartnerBackyards(backyards);
-        backyardRepository.delete(current); // TODO: do we really need this (?)
+
+    Backyard backyardToRemove = null;
+    for (Backyard current : backyards) {
+      if (current.getBackyardId().equals(backyardId)) {
+        backyardToRemove = current;
         break;
-      } else {
-        // TODO: this will break the for loop..  we need to throw this only after looping throug end of list
-        // throw new BackyardWeddingException("PartnerService.BACKYARD_NOT_FOUND");
       }
     }
-    return backyardId;
+
+    backyards.remove(backyardToRemove);
+    partner.setPartnerBackyards(backyards);
+
+    if(backyardToRemove == null) {
+      throw new BackyardWeddingException("PartnerService.BACKYARD_NOT_FOUND");
+    }
+
+    return backyardToRemove.getBackyardId();
   }
 
 }
