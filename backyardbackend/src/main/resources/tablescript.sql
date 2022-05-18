@@ -1,11 +1,11 @@
 
 INSERT INTO customer (first_name, last_name, password, customer_email_id) VALUES 
-    ("Kyla", "Friso", "KylaF@", "kylaf@gmail.com"),
-    ("Hadi", "Robertson","HadiR@", "hadir@gmail.com");
+    ("Kyla", "Friso", "Kyla@123", "kylaf@gmail.com"),
+    ("Hadi", "Robertson","Hadi@123", "hadir@gmail.com");
     
 INSERT INTO partner(first_name, last_name, password, partner_email_id) VALUES 
-    ("Julia", "Bubbles", "JuliaB@", "juliab@gmail.com"),
-    ("Ann", "Tseng", "AnnT@", "annt@gmail.com");
+    ("Julia", "Bubbles", "Julia@123", "juliab@gmail.com"),
+    ("Ann", "Tseng", "Ann@123", "annt@gmail.com");
 
 --@block
 INSERT INTO backyard(backyard_name, backyard_description, backyard_city, backyard_cost, partner_email_id) VALUES

@@ -159,11 +159,30 @@ public class PartnerServiceImpl implements PartnerService {
     backyards.remove(backyardToRemove);
     partner.setPartnerBackyards(backyards);
 
-    if(backyardToRemove == null) {
+    if (backyardToRemove == null) {
       throw new BackyardWeddingException("PartnerService.BACKYARD_NOT_FOUND");
     }
 
     return backyardToRemove.getBackyardId();
+  }
+
+  @Override
+  public List<BackyardDTO> getAllBackyards() throws BackyardWeddingException {
+    Iterable<Backyard> backyards = backyardRepository.findAll();
+
+    List<BackyardDTO> result = new ArrayList<>();
+    for(Backyard current: backyards) {
+      BackyardDTO dto = new BackyardDTO();
+      dto.setBackyardId(current.getBackyardId());
+      dto.setBackyardName(current.getBackyardName());
+      dto.setBackyardCity(current.getBackyardCity());
+      dto.setBackyardDescription(current.getBackyardDescription());
+      dto.setBackyardCost(current.getBackyardCost());
+      dto.setPartnerEmailId(current.getPartnerEmailId());
+      result.add(dto);
+    }
+
+    return result;
   }
 
 }

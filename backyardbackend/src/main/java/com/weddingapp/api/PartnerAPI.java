@@ -91,4 +91,10 @@ public class PartnerAPI {
   return new ResponseEntity<>(successMsg, HttpStatus.OK);
   }
 
+  @GetMapping(value = "/backyard/getall")
+  public ResponseEntity<List<BackyardDTO>> getAllBackyards() throws BackyardWeddingException {
+    List<BackyardDTO> backyardDTOs = partnerService.getAllBackyards();
+    return new ResponseEntity<>(backyardDTOs, HttpStatus.OK);
+  }
+
 }

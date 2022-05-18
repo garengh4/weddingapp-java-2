@@ -1,5 +1,6 @@
 package com.weddingapp.service;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -69,7 +70,20 @@ public class CustomerServiceImpl implements CustomerService {
       dto.setFirstName(c.getFirstName());
       dto.setLastName(c.getLastName());
       dto.setPassword(c.getPassword());
-      // Not setting events here. (?)
+
+      List<Event> events = c.getCustomerEvents();
+      List<EventDTO> eventDTOs = new ArrayList<>();
+      for(Event e: events) {
+        EventDTO eventDTO = new EventDTO();
+        eventDTO.setEventId(e.getEventId());
+        eventDTO.setBackyardId(e.getBackyardId());
+        eventDTO.setEventName(e.getEventName());
+        eventDTO.setEventDescription(e.getEventDescription());
+        eventDTO.setEventDate(e.getEventDate());
+        eventDTO.setCustomerEmailId(e.getCustomerEmailId());
+        eventDTOs.add(eventDTO);
+      }
+      dto.setCustomerEvents(eventDTOs);
       customerDTOs.add(dto);
     }
     return customerDTOs;
@@ -176,16 +190,21 @@ public class CustomerServiceImpl implements CustomerService {
         .orElseThrow(() -> new BackyardWeddingException("CustomerService.CUSTOMER_NOT_FOUND"));
     List<Event> events = customer.getCustomerEvents();
 
+    Event eventToRemove = null;
     for (Event currentEvent : events) {
       if (currentEvent.getEventId().equals(eventId)) {
-        events.remove(currentEvent);
-        customer.setCustomerEvents(events);
-        eventRepository.delete(currentEvent);
+        eventToRemove = currentEvent;
         break;
-      } else {
-        throw new BackyardWeddingException("CustomerService.EVENT_NOT_FOUND");
       }
     }
+
+    events.remove(eventToRemove);
+    customer.setCustomerEvents(events);
+    if(eventToRemove == null) {
+      throw new BackyardWeddingException("CustomerService.EVENT_NOT_FOUND");
+    }
+
+    // eventRepository.delete(currentEvent);
     return eventId;
   }
 
