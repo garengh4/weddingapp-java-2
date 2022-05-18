@@ -4,40 +4,49 @@ import java.util.List;
 
 public class PartnerDTO {
 
-  private Integer partnerId;
+  private String partnerEmailId;
   private String firstName;
   private String lastName;
-  private Integer partnerRating;
+  private String password;
   private List<BackyardDTO> partnerBackyards;
   // -----------------------------------------------------------------------------------------------------------
 
-  public Integer getPartnerId() {
-    return partnerId;
+  public String getPartnerEmailId() {
+    return partnerEmailId;
   }
-  public void setPartnerId(Integer partnerId) {
-    this.partnerId = partnerId;
+
+  public void setPartnerEmailId(String partnerEmailId) {
+    this.partnerEmailId = partnerEmailId;
   }
+
   public String getFirstName() {
     return firstName;
   }
+
   public void setFirstName(String firstName) {
     this.firstName = firstName;
   }
+
   public String getLastName() {
     return lastName;
   }
+
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
-  public Integer getPartnerRating() {
-    return partnerRating;
+
+  public String getPassword() {
+    return password;
   }
-  public void setPartnerRating(Integer partnerRating) {
-    this.partnerRating = partnerRating;
+
+  public void setPassword(String password) {
+    this.password = password;
   }
+
   public List<BackyardDTO> getPartnerBackyards() {
     return partnerBackyards;
   }
+
   public void setPartnerBackyards(List<BackyardDTO> partnerBackyards) {
     this.partnerBackyards = partnerBackyards;
   }

@@ -27,127 +27,162 @@ public class PartnerServiceImpl implements PartnerService {
   private BackyardRepository backyardRepository;
 
   @Override
-  public Integer registerNewPartner(PartnerDTO partnerDTO) throws BackyardWeddingException {
-    Partner partner = new Partner();
-    partner.setFirstName(partnerDTO.getFirstName());
-    partner.setLastName(partnerDTO.getLastName());
+  public String registerNewPartner(PartnerDTO partnerDTO) throws BackyardWeddingException {
+    boolean isEmailAvailable = partnerRepository.findById(partnerDTO.getPartnerEmailId().toLowerCase()).isEmpty();
 
-    // not setting partnerRating here: who actually sets the partnerRating?
-    // not setting partnerBackyard here: the backyard will be added later.
-
-    Partner partnerFromDB = partnerRepository.save(partner);
-    return partnerFromDB.getPartnerId();
+    if (isEmailAvailable) {
+      Partner newPartner = new Partner();
+      newPartner.setPartnerEmailId(partnerDTO.getPartnerEmailId());
+      newPartner.setFirstName(partnerDTO.getFirstName());
+      newPartner.setLastName(partnerDTO.getLastName());
+      newPartner.setPassword(partnerDTO.getPassword());
+      partnerRepository.save(newPartner);
+    } else {
+      throw new BackyardWeddingException("PartnerService.EMAIL_ID_ALREADY_IN_USE");
+    }
+    return partnerDTO.getPartnerEmailId();
   }
 
   @Override
   public List<PartnerDTO> getAllPartner() throws BackyardWeddingException {
     Iterable<Partner> partners = partnerRepository.findAll();
-
     List<PartnerDTO> partnerDTOs = new ArrayList<>();
-    partners.forEach(entity -> {
+    for (Partner current : partners) {
       PartnerDTO dto = new PartnerDTO();
-      dto.setPartnerId(entity.getPartnerId());
-      dto.setFirstName(entity.getFirstName());
-      dto.setLastName(entity.getLastName());
-      dto.setPartnerRating(entity.getPartnerRating());
-      // not setting partner backyard here?
-      // Probably combine getBackyardsByPartnerId to getAllPartner?
+      dto.setPartnerEmailId(current.getPartnerEmailId());
+      dto.setFirstName(current.getFirstName());
+      dto.setLastName(current.getLastName());
+      dto.setPassword(current.getPassword());
       partnerDTOs.add(dto);
-    });
+    }
     return partnerDTOs;
   }
 
   @Override
-  public PartnerDTO authenticatePartner(Integer partnerId, String firstName, String lastName)
-      throws BackyardWeddingException {
-    Partner partner = partnerRepository.findById(partnerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find partner with that partnerId."));
+  public PartnerDTO authenticatePartner(String emailId, String password) throws BackyardWeddingException {
+    Partner partner = partnerRepository.findById(emailId)
+        .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
 
-    if (!firstName.equals(partner.getFirstName()) || !lastName.equals(partner.getLastName())) {
-      throw new BackyardWeddingException("SERVICE ERROR: incorrect first or last name");
+    if (!password.equals(partner.getPassword())) {
+      throw new BackyardWeddingException("PartnerService.INVALID_CREDENTIALS");
     }
 
     PartnerDTO partnerDTO = new PartnerDTO();
-    partnerDTO.setPartnerId(partner.getPartnerId());
+    partnerDTO.setPartnerEmailId(emailId);
     partnerDTO.setFirstName(partner.getFirstName());
     partnerDTO.setLastName(partner.getLastName());
-    partnerDTO.setPartnerRating(partner.getPartnerRating());
+    partnerDTO.setPassword(password);
 
-    List<Backyard> partnerBackyards = partner.getBackyards();
-    List<BackyardDTO> partnerBackyardsDTO = partnerBackyards.stream().map(entity -> {
-      BackyardDTO dto = new BackyardDTO();
-      dto.setBackyardId(entity.getBackyardId());
-      dto.setBackyardDescription(entity.getBackyardDescription());
-      dto.setBackyardRating(entity.getBackyardRating());
-      dto.setBackyardCity(entity.getBackyardCity());
-      dto.setBackyardCost(entity.getBackyardCost());
-      // not setting partnerId here because it seems redundant.
-      return dto;
-    }).collect(Collectors.toList());
-
-    partnerDTO.setPartnerBackyards(partnerBackyardsDTO);
+    if (partner.getPartnerBackyards() != null && !partner.getPartnerBackyards().isEmpty()) {
+      List<BackyardDTO> backyardDTOs = partner.getPartnerBackyards().stream().map(e -> {
+        BackyardDTO backyardDTO = new BackyardDTO();
+        backyardDTO.setBackyardId(e.getBackyardId());
+        backyardDTO.setBackyardName(e.getBackyardName());
+        backyardDTO.setBackyardDescription(e.getBackyardDescription());
+        backyardDTO.setBackyardCity(e.getBackyardCity());
+        backyardDTO.setBackyardCost(e.getBackyardCost());
+        backyardDTO.setPartnerEmailId(emailId);
+        return backyardDTO;
+      }).collect(Collectors.toList());
+      partnerDTO.setPartnerBackyards(backyardDTOs);
+    }
     return partnerDTO;
+
   }
 
   @Override
-  public String deletePartnerById(Integer partnerId) throws BackyardWeddingException {
-    Partner partner = partnerRepository.findById(partnerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find partner with that partnerId."));
+  public String deletePartner(String partnerEmailId) throws BackyardWeddingException {
+    Partner partner = partnerRepository.findById(partnerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
 
+    if (partner.getPartnerBackyards() != null && !partner.getPartnerBackyards().isEmpty()) {
+      throw new BackyardWeddingException("PartnerService.DELETE_PARTNER_INVALID");
+    }
     partnerRepository.delete(partner);
-    return "SERVICE: partner deleted successfully.";
+    return partnerEmailId;
   }
+
   // ==================================================================================================================
 
   @Override
-  public Integer addBackyardByPartnerId(Integer partnerId, BackyardDTO backyardDTO) throws BackyardWeddingException {
-    Partner partner = partnerRepository.findById(partnerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find partner with that partnerId."));
+  public Integer addBackyardToPartner(String partnerEmailId, BackyardDTO backyardDTO) throws BackyardWeddingException {
 
-    List<Backyard> listOfPartnerBackyards = partner.getBackyards();
+    // validation for if partner exists in db
+    partnerRepository.findById(partnerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
 
-    Backyard newBackyard = new Backyard();
-    newBackyard.setPartnerId(partnerId);
-    newBackyard.setBackyardDescription(backyardDTO.getBackyardDescription());
-    newBackyard.setBackyardRating(backyardDTO.getBackyardRating()); // not sure who actually sets the backyardRating
-    newBackyard.setBackyardCity(backyardDTO.getBackyardCity());
-    newBackyard.setBackyardCost(backyardDTO.getBackyardCost());
+    Backyard backyard = new Backyard();
+    backyard.setPartnerEmailId(partnerEmailId);
+    backyard.setBackyardName(backyardDTO.getBackyardName());
+    backyard.setBackyardDescription(backyardDTO.getBackyardDescription());
+    backyard.setBackyardCity(backyardDTO.getBackyardCity());
+    backyard.setBackyardCost(backyardDTO.getBackyardCost());
 
-    Backyard newBackyardInDB = backyardRepository.save(newBackyard);
-    listOfPartnerBackyards.add(newBackyard);
-    partner.setBackyards(listOfPartnerBackyards);
-    partnerRepository.save(partner);
-
-    return newBackyardInDB.getBackyardId();
+    Backyard returned = backyardRepository.save(backyard);
+    return returned.getBackyardId();
   }
 
   @Override
-  public List<BackyardDTO> getBackyardsByPartnerId(Integer partnerId) throws BackyardWeddingException {
-    Partner partner = partnerRepository.findById(partnerId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find partner with that partnerId."));
+  public List<BackyardDTO> getPartnerBackyards(String partnerEmailId) throws BackyardWeddingException {
+    Partner partner = partnerRepository.findById(partnerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
 
-    List<Backyard> backyards = partner.getBackyards();
+    List<BackyardDTO> backyardDTOs = partner.getPartnerBackyards().stream().map(e -> {
+      BackyardDTO backyardDTO = new BackyardDTO();
+      backyardDTO.setBackyardId(e.getBackyardId());
+      backyardDTO.setBackyardName(e.getBackyardName());
+      backyardDTO.setBackyardDescription(e.getBackyardDescription());
+      backyardDTO.setBackyardCity(e.getBackyardCity());
+      backyardDTO.setBackyardCost(e.getBackyardCost());
+      backyardDTO.setPartnerEmailId(partnerEmailId);
+      return backyardDTO;
+    }).collect(Collectors.toList());
 
-    List<BackyardDTO> listBackyards = new ArrayList<>();
-    backyards.forEach(partnerBackyard -> {
-      BackyardDTO backyard = new BackyardDTO();
-      backyard.setBackyardId(partnerBackyard.getBackyardId());
-      backyard.setBackyardDescription(partnerBackyard.getBackyardDescription());
-      backyard.setBackyardCity(partnerBackyard.getBackyardCity());
-      backyard.setBackyardCost(partnerBackyard.getBackyardCost());
-      backyard.setBackyardRating(partnerBackyard.getBackyardRating());
-      backyard.setPartnerId(partnerId);
-      listBackyards.add(backyard);
-    });
-    return listBackyards;
+    return backyardDTOs;
   }
 
   @Override
-  public String deleteBackyardById(Integer backyardId) throws BackyardWeddingException {
-    Backyard backyard = backyardRepository.findById(backyardId).orElseThrow(
-        () -> new BackyardWeddingException("SERVICE ERROR: Could not find backyard with that backyardId."));
+  public Integer deletePartnerBackyard(String partnerEmailId, Integer backyardId) throws BackyardWeddingException {
+    Partner partner = partnerRepository.findById(partnerEmailId)
+        .orElseThrow(() -> new BackyardWeddingException("PartnerService.PARTNER_NOT_FOUND"));
 
-    backyardRepository.delete(backyard);
-    return "SERVICE: backyard removed successfully.";
+    List<Backyard> backyards = partner.getPartnerBackyards();
+
+    Backyard backyardToRemove = null;
+    for (Backyard current : backyards) {
+      if (current.getBackyardId().equals(backyardId)) {
+        backyardToRemove = current;
+        break;
+      }
+    }
+
+    backyards.remove(backyardToRemove);
+    partner.setPartnerBackyards(backyards);
+
+    if (backyardToRemove == null) {
+      throw new BackyardWeddingException("PartnerService.BACKYARD_NOT_FOUND");
+    }
+
+    return backyardToRemove.getBackyardId();
   }
+
+  @Override
+  public List<BackyardDTO> getAllBackyards() throws BackyardWeddingException {
+    Iterable<Backyard> backyards = backyardRepository.findAll();
+
+    List<BackyardDTO> result = new ArrayList<>();
+    for(Backyard current: backyards) {
+      BackyardDTO dto = new BackyardDTO();
+      dto.setBackyardId(current.getBackyardId());
+      dto.setBackyardName(current.getBackyardName());
+      dto.setBackyardCity(current.getBackyardCity());
+      dto.setBackyardDescription(current.getBackyardDescription());
+      dto.setBackyardCost(current.getBackyardCost());
+      dto.setPartnerEmailId(current.getPartnerEmailId());
+      result.add(dto);
+    }
+
+    return result;
+  }
+
 }

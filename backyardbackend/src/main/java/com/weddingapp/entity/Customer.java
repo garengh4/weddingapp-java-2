@@ -5,40 +5,40 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="customer")
+@Table(name = "customer")
 public class Customer {
-  
-	@Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  @Column(name="customer_id")
-	private Integer customerId;
 
-  @Column(name="first_name")
-	private String firstName;
+  @Id
+  @Column(name = "customer_email_id")
+  private String customerEmailId;
 
-  @Column(name="last_name")
-	private String lastName;
+  @Column(name = "first_name")
+  private String firstName;
+
+  @Column(name = "last_name")
+  private String lastName;
+
+  @Column(name = "password")
+  private String password;
 
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name="customer_id")
-  private List<Event> events;
+  @JoinColumn(name = "customer_email_id")
+  private List<Event> customerEvents;
 
   // -----------------------------------------------------------------------------------------------------------
 
-  public Integer getCustomerId() {
-    return customerId;
+  public String getCustomerEmailId() {
+    return customerEmailId;
   }
 
-  public void setCustomerId(Integer customerId) {
-    this.customerId = customerId;
+  public void setCustomerEmailId(String customerEmailId) {
+    this.customerEmailId = customerEmailId;
   }
 
   public String getFirstName() {
@@ -57,13 +57,22 @@ public class Customer {
     this.lastName = lastName;
   }
 
-  public List<Event> getEvents() {
-    return events;
+  public String getPassword() {
+    return password;
   }
 
-  public void setEvents(List<Event> events) {
-    this.events = events;
+  public void setPassword(String password) {
+    this.password = password;
   }
+
+  public List<Event> getCustomerEvents() {
+    return customerEvents;
+  }
+
+  public void setCustomerEvents(List<Event> customerEvents) {
+    this.customerEvents = customerEvents;
+  }
+
 
 
 }

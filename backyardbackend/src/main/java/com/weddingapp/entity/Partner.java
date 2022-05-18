@@ -5,42 +5,39 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="partner")
+@Table(name = "partner")
 public class Partner {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
-  @Column(name="partner_id")
-  private Integer partnerId;
+  @Column(name = "partner_email_id")
+  private String partnerEmailId;
 
-  @Column(name="first_name")
+  @Column(name = "first_name")
   private String firstName;
 
-  @Column(name="last_name")
+  @Column(name = "last_name")
   private String lastName;
 
-  @Column(name="partner_rating")
-  private Integer partnerRating;
+  @Column(name = "password")
+  private String password;
 
   // backyard table have partner_id
   @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name="partner_id")
-  private List<Backyard> backyards;
+  @JoinColumn(name = "partner_email_id")
+  private List<Backyard> partnerBackyards;
   // -----------------------------------------------------------------------------------------------------------
 
-  public Integer getPartnerId() {
-    return partnerId;
+  public String getPartnerEmailId() {
+    return partnerEmailId;
   }
 
-  public void setPartnerId(Integer partnerId) {
-    this.partnerId = partnerId;
+  public void setPartnerEmailId(String partnerEmailId) {
+    this.partnerEmailId = partnerEmailId;
   }
 
   public String getFirstName() {
@@ -59,20 +56,22 @@ public class Partner {
     this.lastName = lastName;
   }
 
-  public Integer getPartnerRating() {
-    return partnerRating;
+  public String getPassword() {
+    return password;
   }
 
-  public void setPartnerRating(Integer partnerRating) {
-    this.partnerRating = partnerRating;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
-  public List<Backyard> getBackyards() {
-    return backyards;
+  public List<Backyard> getPartnerBackyards() {
+    return partnerBackyards;
   }
 
-  public void setBackyards(List<Backyard> backyards) {
-    this.backyards = backyards;
+  public void setPartnerBackyards(List<Backyard> partnerBackyards) {
+    this.partnerBackyards = partnerBackyards;
   }
-  
+
+
+
 }
